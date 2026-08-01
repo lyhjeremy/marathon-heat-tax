@@ -5,6 +5,7 @@ finish time rises about **1 minute per °F** (correlation **r = 0.86**). A hot 8
 day costs the median runner roughly **31 minutes** versus a cool 50°F day.
 
 > 🌐 **Read the story:** https://lyhjeremy.github.io/marathon-heat-tax/
+> 📖 **In depth:** https://lyhjeremy.github.io/marathon-heat-tax/overview/
 
 ## Findings
 - Temperature vs field median finish time: **r = 0.86** (2013 excluded).

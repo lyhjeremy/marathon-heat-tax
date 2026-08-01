@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>The Heat Tax — one minute per degree, across 14 Boston Marathons</title>
+<meta name="description" content="Pairing 14 editions of the Boston Marathon with race-day weather. The field's median finish time rises about one minute per °F, r = 0.86. An 80°F day costs the median runner half an hour." />
+<meta name="theme-color" content="#FBF8F1" />
+<meta property="og:title" content="The Heat Tax" />
+<meta property="og:description" content="Fourteen Boston Marathons against race-day temperature. Every degree costs the median runner about a minute." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lyhjeremy.github.io/marathon-heat-tax/overview/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #FBF8F1;
+    --card: #FFFFFF;
+    --plate: #FFFFFF;
+    --ink: #1a1a2e;
+    --ink2: #3d3d55;
+    --muted: #6B7280;
+    --rule: #E5DCC7;
+    --accent: #C2410C;
+    --accent2: #D4A537;
+    --link: #15868C;
+    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --sans: 'Source Sans 3', -apple-system, system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+    --shadow: 0 1px 2px rgba(26,26,46,.05), 0 10px 34px rgba(26,26,46,.07);
+    --spine:  92px;
+    --col:    min(100% - 2.6rem, 62rem);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #14141f;
+      --card: #1c1c2a;
+      --plate: #f7f4ec;
+      --ink: #F2EFE6;
+      --ink2: #C9C4B6;
+      --muted: #918B7D;
+      --rule: #33313f;
+      --accent: #FB923C;
+      --accent2: #E3BC5E;
+      --link: #3FB4B9;
+      --shadow: 0 1px 2px rgba(0,0,0,.32), 0 10px 34px rgba(0,0,0,.4);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--serif); font-size: clamp(17px, 0.55rem + 0.6vw, 19.5px);
+    line-height: 1.68; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: var(--link); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+  strong { font-weight: 700; color: var(--ink); }
+  code { font-family: var(--mono); font-size: .86em;
+         background: color-mix(in srgb, var(--ink) 7%, transparent);
+         padding: .12em .38em; border-radius: 4px; }
+  .wrap { width: var(--col); margin: 0 auto; }
+
+  .eyebrow { font-family: var(--mono); font-weight: 600; font-size: 11.5px;
+             letter-spacing: .17em; text-transform: uppercase; color: var(--muted);
+             margin: 0 0 14px; }
+
+  .masthead { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding: 30px 0 0; }
+  .logo { font-family: var(--sans); font-weight: 800; font-size: 21px;
+          letter-spacing: -.02em; display: flex; align-items: center; gap: 9px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; }
+  .tagline { font-size: 15px; color: var(--ink2); font-family: var(--sans); }
+
+  .hero { padding: 44px 0 54px; }
+  .kicker { font-family: var(--sans); font-size: clamp(18px, 2.1vw, 23px); font-weight: 600;
+            color: var(--muted); margin: 0 0 8px; letter-spacing: -.01em; }
+  .hero h1 { font-family: var(--sans); font-size: clamp(37px, 6vw, 72px); font-weight: 800;
+             letter-spacing: -.035em; line-height: 1.04; margin: 0; max-width: 17ch; }
+  .hero-sub { margin: 24px 0 0; font-size: 1.06em; color: var(--ink2); max-width: 60ch; }
+
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; align-items: center; }
+  .btn { display: inline-block; padding: 13px 26px; border-radius: 8px;
+         font-family: var(--sans); font-weight: 700; font-size: 16px;
+         text-decoration: none; border: 1px solid var(--ink); transition: transform .15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .textlink { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--ink2);
+              text-decoration: underline; text-underline-offset: 4px;
+              text-decoration-thickness: 1px; }
+  .textlink:hover { color: var(--ink); }
+
+  .claims { display: grid; grid-template-columns: 1fr; gap: 0 52px; margin: 50px 0 0; }
+  @media (min-width: 760px) { .claims { grid-template-columns: 1fr 1fr; } }
+  .claim { padding: 18px 0 20px; border-top: 1px solid var(--rule); }
+  .claim:first-child, .claim:nth-child(2) { border-top: 2px solid var(--ink); }
+  @media (max-width: 759px) { .claim:nth-child(2) { border-top: 1px solid var(--rule); } }
+  .claim .n { font-family: var(--sans); font-weight: 800; font-size: 40px; line-height: 1.05;
+              color: var(--accent); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .claim h3 { margin: 0 0 6px; }
+  .claim p { margin: 9px 0 0; font-size: 15.5px; color: var(--ink2); line-height: 1.5;
+             font-family: var(--sans); }
+
+  .route { position: relative; padding-bottom: 30px; }
+  .route::before { content: ""; position: absolute; left: calc(var(--spine) / 2); top: 8px;
+                   bottom: 80px; width: 2px; background: var(--rule); }
+  .stop { position: relative; padding: 0 0 76px var(--spine); }
+  .stop::before { content: ""; position: absolute; left: calc(var(--spine) / 2 - 7px); top: 7px;
+                  width: 16px; height: 16px; border-radius: 50%;
+                  background: var(--paper); border: 2px solid var(--ink); box-sizing: border-box; }
+  .stop--key::before { background: var(--accent); border-color: var(--accent); }
+  .stop--warn::before { background: var(--accent2); border-color: var(--accent2); }
+  .stop--end::before { background: var(--ink); }
+
+  h2 { font-family: var(--sans); font-size: clamp(27px, 3.7vw, 38px); font-weight: 800;
+       letter-spacing: -.027em; line-height: 1.13; margin: 12px 0 16px; max-width: 19ch; }
+  h3 { font-family: var(--sans); font-size: 17px; font-weight: 700; margin: 0 0 7px;
+       letter-spacing: -.012em; }
+  .stop p { margin: 0 0 17px; max-width: 60ch; color: var(--ink2); }
+
+  .bignum { font-family: var(--sans); font-weight: 800; font-size: clamp(74px, 10vw, 128px);
+            line-height: .86; letter-spacing: -.05em; margin: 6px 0 4px; color: var(--accent);
+            font-variant-numeric: tabular-nums; }
+  .bignum-note { font-family: var(--sans); font-size: 16px; color: var(--muted); margin: 0 0 20px; }
+
+  /* A white-background chart would glow in dark mode; the plate makes it read
+     as a deliberately printed page instead. */
+  figure { margin: 28px 0 0; }
+  .plate { background: var(--plate); border: 1px solid var(--rule); border-radius: 10px;
+           padding: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .plate img { border-radius: 4px; }
+  .plate--flush { padding: 0; }
+  .shot { border-radius: 10px; border: 1px solid var(--rule); box-shadow: var(--shadow);
+          overflow: hidden; background: var(--card); }
+  /* min() so the cap never exceeds the column on a phone */
+  .shot--narrow { max-width: min(430px, 100%); }
+  figcaption { margin-top: 11px; font-family: var(--sans); font-size: 14.5px;
+               color: var(--muted); line-height: 1.5; }
+  .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+            gap: 22px; margin-top: 28px; }
+  .panels figure { margin: 0; }
+
+  .pull { margin: 30px 0 0; padding: 20px 25px; border-left: 3px solid var(--accent);
+          background: color-mix(in srgb, var(--accent) 7%, transparent);
+          border-radius: 0 8px 8px 0; }
+  .pull p { margin: 0 0 9px; color: var(--ink); max-width: none; }
+  .pull p:last-of-type { margin: 0; }
+  .pull .who { font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+               text-transform: uppercase; color: var(--muted); display: block; margin-top: 9px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+          gap: 1px; margin-top: 28px; background: var(--rule);
+          border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .cell { background: var(--paper); padding: 22px 20px; }
+  .cell p { font-size: 15px; margin: 0; color: var(--ink2); max-width: none;
+            line-height: 1.55; font-family: var(--sans); }
+
+  /* results tables: scroll inside their own box, never the page */
+  .tablewrap { margin-top: 26px; overflow-x: auto; border: 1px solid var(--rule);
+               border-radius: 10px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; min-width: 480px;
+          font-family: var(--sans); font-size: 15.5px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--rule); }
+  th { font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+       text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  td { color: var(--ink2); font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  .win td { color: var(--ink); font-weight: 700;
+            background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+  /* real terminal output, quoted verbatim */
+  .term { margin-top: 26px; background: #14141f; color: #e6e3da; border-radius: 10px;
+          padding: 18px 20px; overflow-x: auto; box-shadow: var(--shadow);
+          border: 1px solid #2a2a3a; }
+  .term pre { margin: 0; font-family: var(--mono); font-size: 13px; line-height: 1.62;
+              white-space: pre; }
+  .term .c { color: #9aa08f; }
+  .term .g { color: #7fd18f; }
+  .term .y { color: #E3BC5E; }
+
+  .specs { margin-top: 26px; border-top: 1px solid var(--rule); }
+  .spec { display: grid; grid-template-columns: 1fr; gap: 2px;
+          padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  @media (min-width: 700px) { .spec { grid-template-columns: 178px 1fr; gap: 24px; } }
+  .spec dt { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em;
+             text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+  .spec dd { margin: 0; font-size: 16px; color: var(--ink2); font-family: var(--sans); }
+
+  .close { padding: 6px 0 80px var(--spine); position: relative; }
+  .close h2 { max-width: 20ch; }
+  footer { border-top: 1px solid var(--rule); padding: 28px 0 60px;
+           font-family: var(--sans); font-size: 14.5px; color: var(--muted); }
+  footer a { color: var(--ink2); }
+  footer p { margin: 0 0 8px; }
+
+  @media (max-width: 640px) {
+    :root { --spine: 38px; }
+    .hero { padding: 36px 0 46px; }
+    .stop { padding-bottom: 58px; }
+    .plate { padding: 9px; }
+    .term { padding: 14px 14px; }
+    .term pre { font-size: 11.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .btn { transition: none; }
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="logo"><span class="dot" aria-hidden="true"></span>The Heat Tax</div>
+    <div class="tagline">what a warm race morning actually costs</div>
+  </header>
+
+  <section class="hero">
+    <p class="kicker">Runners blame the weather. The weather deserves it.</p>
+    <h1>One degree costs a minute.</h1>
+
+    <p class="hero-sub">
+      Pair fourteen editions of the Boston Marathon with the temperature on the
+      road that morning and the relationship is almost embarrassingly clean. The
+      field's <strong>median finish time rises about one minute per °F</strong>,
+      with a correlation of <strong>r = 0.86</strong>. Between a cool 50°F morning
+      and a hot 80°F one sits roughly <strong>half an hour</strong> of the median
+      runner's day.
+    </p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="../">Read the short version</a>
+      <a class="textlink" href="https://github.com/lyhjeremy/marathon-heat-tax">or the code and data</a>
+    </div>
+
+    <div class="claims">
+      <div class="claim">
+        <div class="n">r = 0.86</div>
+        <p>between race-day temperature and the field's median finish time, across
+           14 years of the same race on the same course.</p>
+      </div>
+      <div class="claim">
+        <div class="n">~1 min</div>
+        <p>added to the median finish for every additional °F. The slope is the
+           whole finding.</p>
+      </div>
+      <div class="claim">
+        <div class="n">31 min</div>
+        <p>the gap between a 50°F and an 80°F running of the same race, for the
+           runner in the middle of the field.</p>
+      </div>
+      <div class="claim">
+        <div class="n">81°F</div>
+        <p>Boston 2012, the hottest morning in the set and one of the slowest
+           fields. 2004 at 74°F is right behind it.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+<div class="route">
+
+  <section class="stop">
+    <p class="eyebrow">Start · the question</p>
+    <h2>Everybody knows heat is slow. Nobody quotes a number.</h2>
+    <p>
+      "It was hot" is the universal excuse and the universal explanation, and it
+      is almost never accompanied by a figure. How much slower, exactly? Enough
+      to explain a bad day, or just enough to feel like it did?
+    </p>
+    <p>
+      One race run repeatedly is the cleanest way to ask. Boston runs the same
+      course every April with a broadly similar field, so year-to-year changes in
+      the median finish time are mostly weather and not geography. Fourteen
+      editions gives fourteen points, each one a whole field's worth of runners
+      collapsed into a single robust number.
+    </p>
+  </section>
+
+  <section class="stop stop--key">
+    <p class="eyebrow">↓ the relationship</p>
+    <h2>A straight line through fourteen years</h2>
+
+    <div class="bignum">0.86</div>
+    <p class="bignum-note">correlation between race-morning temperature and the field's median finish.</p>
+
+    <p>
+      Each point is an entire Boston field. The fit slopes upward at close to a
+      minute per degree and the scatter around it is small. For a relationship
+      built from real race days rather than a laboratory, that is a tight result.
+    </p>
+    <p>
+      The practical translation: <strong>50°F to 80°F is about 31 minutes</strong>
+      on the median finish. That is the difference between a good day and a day
+      people talk about for years.
+    </p>
+    <figure>
+      <div class="plate">
+        <img width="1720" height="1080" src="../figures/01_temp_vs_time.png" fetchpriority="high"
+          alt="Scatter plot of race-day temperature against the field's median finish time for fourteen Boston Marathons, with a fitted upward-sloping line. The hottest years sit top right and the coolest bottom left." />
+      </div>
+      <figcaption>Fourteen races, one line. Each dot is a whole field's median.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">↓ year by year</p>
+    <h2>The hot years are the slow years</h2>
+    <p>
+      Plotted chronologically the same story shows up as spikes. <strong>2012,
+      at 81°F</strong>, and <strong>2004, at 74°F</strong>, stand out as both the
+      warmest mornings and among the slowest fields in the set. There is no
+      warming trend hiding in here and no steady drift; the median finish simply
+      tracks whatever the thermometer did that morning.
+    </p>
+    <figure>
+      <div class="plate">
+        <img width="1800" height="960" src="../figures/02_median_by_year.png" loading="lazy"
+          alt="Median finish time by year from 2001 to 2014, with visible upward spikes in the hot years 2004 and 2012 and lower values in cooler years." />
+      </div>
+      <figcaption>Median finish by year. The spikes line up with the warm mornings.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop stop--warn">
+    <p class="eyebrow">↓ what this cannot tell you</p>
+    <h2>Fourteen points is fourteen points</h2>
+    <p>
+      This is a descriptive relationship across fourteen observations, not a
+      controlled experiment. Field size, qualifying standards and the make-up of
+      the entry list all shifted over these years, and any of them could push the
+      median around independently of the weather.
+    </p>
+    <p>
+      <strong>2013 is excluded from the fit</strong>, and it should be. The race
+      was stopped after the bombing, so its finisher set is truncated in a way
+      that has nothing to do with temperature. Leaving it in would have quietly
+      corrupted the slope. It is dropped explicitly rather than silently.
+    </p>
+    <p>
+      Temperature is also a stand-in for a bundle of things that travel together:
+      humidity, sun, and radiant heat off the road. The one-minute-per-degree
+      figure should be read as the cost of a warm race morning, not of dry-bulb
+      temperature specifically.
+    </p>
+    <p>
+      With those stated, the effect is large, it points the way sports-science
+      literature says it should, and it is stable enough that no single year drives it.
+    </p>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">↓ so what</p>
+    <h2>Adjust the goal, not the effort</h2>
+    <p>
+      The useful version of this number is a pre-race one. If the forecast is 15
+      degrees above what you trained in, the honest expectation is a finish time
+      about fifteen minutes softer, and chasing the original number is how the
+      back half of the race falls apart.
+    </p>
+    <div class="pull">
+      <p>The heat does not take the time from you at the finish. It takes it in
+         the last 10 km, from whoever refused to give it up at the start.</p>
+      <span class="who">Read alongside the pacing-decay study</span>
+    </div>
+  </section>
+
+  <section class="stop stop--end">
+    <p class="eyebrow">Finish · how it was built</p>
+    <h2>Where the numbers come from</h2>
+    <p>
+      <code>fetch_data.py</code> pulls both halves — the results and the historical
+      weather — and <code>analyze.py</code> produces the figures and the summary
+      table. Both sources are free and public, and the raw downloads are
+      git-ignored so the repository stays small.
+    </p>
+    <dl class="specs">
+      <div class="spec"><dt>Results</dt><dd>Boston Marathon finishers 2001–2014, via the public <a href="https://github.com/llimllib/bostonmarathon">llimllib/bostonmarathon</a> mirror</dd></div>
+      <div class="spec"><dt>Weather</dt><dd><a href="https://open-meteo.com/">Open-Meteo</a> historical archive, mean of the 10:00–16:00 window near the course</dd></div>
+      <div class="spec"><dt>Median over</dt><dd>Finishers between 2 and 8 hours, which trims timing artefacts without trimming the field</dd></div>
+      <div class="spec"><dt>Excluded</dt><dd>2013, whose field was truncated when the race was halted</dd></div>
+      <div class="spec"><dt>Built with</dt><dd>Python, pandas, matplotlib</dd></div>
+      <div class="spec"><dt>Related</dt><dd>The same figure powers a knowledge card in <a href="https://lyhjeremy.github.io/marathon-strategy-rag/">Marathon Strategy RAG</a> and the heat rule inside <a href="https://lyhjeremy.github.io/race-day-copilot/">Race Day Copilot</a></dd></div>
+    </dl>
+  </section>
+
+</div>
+</div>
+
+<div class="wrap">
+  <section class="close">
+    <h2>Check the forecast before you set the goal</h2>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="../">Read the short version</a>
+      <a class="textlink" href="https://github.com/lyhjeremy/marathon-heat-tax">or the code and data</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      The Heat Tax ·
+      <a href="../">Story</a> ·
+      <a href="https://github.com/lyhjeremy/marathon-heat-tax">Source</a> ·
+      MIT © 2026 Jeremy Lee
+    </p>
+    <p>Results data © the Boston Athletic Association, via a public mirror. Weather by Open-Meteo.</p>
+  </footer>
+</div>
+</body>
+</html>
