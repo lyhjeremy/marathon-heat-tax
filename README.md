@@ -1,11 +1,13 @@
-# The Heat Tax — how much does temperature slow a marathon?
+# The Heat Tax: how much does temperature slow a marathon?
+
+Design and copy follow [these standards](https://github.com/lyhjeremy/lyhjeremy/blob/main/DESIGN_STANDARDS.md).
 
 Pairing 14 Boston Marathons (2001–2014) with race-day weather: the field's median
 finish time rises about **1 minute per °F** (correlation **r = 0.86**). A hot 80°F
 day costs the median runner roughly **31 minutes** versus a cool 50°F day.
 
-> 🌐 **Read the story:** https://lyhjeremy.github.io/marathon-heat-tax/
-> 📖 **In depth:** https://lyhjeremy.github.io/marathon-heat-tax/overview/
+> **Read the story:** https://lyhjeremy.github.io/marathon-heat-tax/
+> **In depth:** https://lyhjeremy.github.io/marathon-heat-tax/overview/
 
 ## Findings
 - Temperature vs field median finish time: **r = 0.86** (2013 excluded).
