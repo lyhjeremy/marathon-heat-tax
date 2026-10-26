@@ -1,38 +1,55 @@
-# The Heat Tax: how much does temperature slow a marathon?
+# The Heat Tax
+
+How much does race-day heat slow a marathon field? Fourteen Boston Marathons (2001 to 2014), each paired with the temperature on the course that day.
+
+[Live site](https://lyhjeremy.github.io/marathon-heat-tax/) · [Write-up](https://lyhjeremy.github.io/marathon-heat-tax/overview/)
 
 Design and copy follow [these standards](https://github.com/lyhjeremy/lyhjeremy/blob/main/DESIGN_STANDARDS.md).
 
-Pairing 14 Boston Marathons (2001–2014) with race-day weather: the field's median
-finish time rises about **1 minute per °F** (correlation **r = 0.86**). A hot 80°F
-day costs the median runner roughly **31 minutes** versus a cool 50°F day.
+## Results
 
-> **Read the story:** https://lyhjeremy.github.io/marathon-heat-tax/
-> **In depth:** https://lyhjeremy.github.io/marathon-heat-tax/overview/
+- The field's median finish time rises **1.03 minutes per °F** (OLS slope, standard error 0.19).
+- Correlation between race-day temperature and the median finish is **r = 0.86** (p = 0.0002, 13 races; 0.82 with 2013 included).
+- A 50°F race versus an 80°F race: about **31 minutes** on the median finish.
+- The two races above 70°F were the two slowest fields: 2004 (73.6°F, median 4:20) and 2012 (81.3°F, median 4:16).
 
-## Findings
-- Temperature vs field median finish time: **r = 0.86** (2013 excluded).
-- Slope ≈ **1 minute slower per °F**.
-- 50°F → 80°F adds about **31 minutes** to the median finish.
-- The hottest years (2012 at 81°F, 2004 at 74°F) were among the slowest.
+![Scatter of race-day temperature against field median finish time for fourteen Boston Marathons, with a fitted line rising about one minute per degree](figures/01_temp_vs_time.png)
 
-## Reproduce
+## Method
+
+For each year, `analyze.py` takes the median of the official finish times of everyone who finished between 2 and 8 hours (13,422 to 31,939 finishers per year, 280,459 in total). Race-day temperature is the mean of hourly 2 m readings from 10:00 to 16:00 local time near the course midpoint (42.30 N, 71.35 W), from the Open-Meteo historical archive.
+
+The relationship is a Pearson correlation and an ordinary least squares fit (`scipy.stats.linregress`) of median finish on temperature. 2013 is excluded from the fit because the race was halted after the bombing, which truncates its finisher field. It is still plotted, drawn hollow.
+
+Stack: Python, pandas, SciPy, matplotlib. The landing page and write-up are static HTML on GitHub Pages.
+
+## How to run
+
 ```bash
 pip install -r requirements.txt
-python fetch_data.py     # downloads 2001-2014 results + Open-Meteo race-day weather
+python fetch_data.py     # downloads 2001-2014 results and Open-Meteo race-day weather into data/
 python analyze.py        # writes figures/ and tables/heat_tax.csv
 ```
 
-## Data
-Official Boston Marathon results 2001–2014 via [llimllib/bostonmarathon](https://github.com/llimllib/bostonmarathon);
-race-day temperatures from the free [Open-Meteo](https://open-meteo.com/) archive
-(mean of the 10:00–16:00 window near the course). Median over finishers 2–8 h.
-2013 is excluded from the fit (race halted by the bombing → truncated field).
-Raw data is downloaded by `fetch_data.py` and git-ignored.
+## Repo layout
 
-## Caveats
-With 14 seasons this is a descriptive relationship, not a controlled experiment;
-field size and qualifying standards also shifted over the years. The heat signal is
-nonetheless large and consistent with sports-science literature.
+| Path | Contents |
+|---|---|
+| `fetch_data.py` | Downloads results and weather (cached in `data/`, git-ignored) |
+| `analyze.py` | Per-year medians, correlation and fit, figures |
+| `tables/heat_tax.csv` | Per-year temperature, median, mean, quartiles and finisher count |
+| `figures/` | Scatter and year-by-year charts |
+| `index.html`, `overview/` | Landing page and full write-up |
+| `writeup.md` | Short write-up |
+
+## Data
+
+Official Boston Marathon results 2001 to 2014 via [llimllib/bostonmarathon](https://github.com/llimllib/bostonmarathon); race-day temperatures from the free [Open-Meteo](https://open-meteo.com/) archive.
+
+## Limitations
+
+Thirteen points describe a relationship and don't establish cause. Field size more than doubled over the period and qualifying standards changed, and either could move the median. Humidity, sun and wind were not modeled, so the slope is the cost of a warm race day rather than of air temperature alone. The result is about a field median, not any one runner.
 
 ## License
+
 [MIT](LICENSE) © 2026 Jeremy Lee
