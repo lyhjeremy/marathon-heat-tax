@@ -12,6 +12,9 @@ Design and copy follow [these standards](https://github.com/lyhjeremy/lyhjeremy/
 - Correlation between race-day temperature and the median finish is **r = 0.86** (p = 0.0002, 13 races; 0.82 with 2013 included).
 - A 50°F race versus an 80°F race: about **31 minutes** on the median finish.
 - The two races above 70°F were the two slowest fields: 2004 (73.6°F, median 4:20) and 2012 (81.3°F, median 4:16).
+- Slower runners pay more. Running the same fit on the quartile columns of `tables/heat_tax.csv` gives 0.76 min per °F at the 25th percentile of the field and 1.35 at the 75th (0.36% against 0.51% of finish time). `analyze.py` reports only the median; these two slopes are computed on the write-up page.
+
+The [write-up](https://lyhjeremy.github.io/marathon-heat-tax/overview/#estimate) has an estimator: enter a marathon time, the temperature it was run in and a forecast, and it applies the rate for that part of the field.
 
 ![Scatter of race-day temperature against field median finish time for fourteen Boston Marathons, with a fitted line rising about one minute per degree](figures/01_temp_vs_time.png)
 
@@ -39,7 +42,7 @@ python analyze.py        # writes figures/ and tables/heat_tax.csv
 | `analyze.py` | Per-year medians, correlation and fit, figures |
 | `tables/heat_tax.csv` | Per-year temperature, median, mean, quartiles and finisher count |
 | `figures/` | Scatter and year-by-year charts |
-| `index.html`, `overview/` | Landing page and full write-up |
+| `index.html`, `overview/` | Landing page and full write-up (charts and estimator are inline SVG and JavaScript built from `tables/heat_tax.csv`) |
 | `writeup.md` | Short write-up |
 
 ## Data

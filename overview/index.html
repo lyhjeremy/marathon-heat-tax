@@ -250,6 +250,53 @@
   .thermo .mv { fill: var(--ink); font-size: 15px; }
   .thermo .hotlab { fill: var(--accent); }
   .thermo .hd { fill: var(--muted); font-size: 11.5px; letter-spacing: .12em; }
+  .fig-title { font-family: var(--display); font-weight: 600; font-size: clamp(22px, 2.8vw, 28px); line-height: 1.1; margin: 0 0 4px; color: var(--ink); }
+  .ctl { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 14px 0 12px; font-family: var(--sans); font-size: 14.5px; color: var(--ink2); }
+  .seg { display: inline-flex; flex-wrap: wrap; }
+  .seg button { font: 600 14px/1.2 var(--sans); padding: 9px 13px; border: 1px solid var(--edge); background: transparent; color: var(--ink); cursor: pointer; margin: 0 -1px -1px 0; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .ctl label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+  .ctl input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; }
+  .chart { border: 1px solid var(--rule); background: var(--card); padding: 10px 10px 4px; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart text { font-family: var(--mono); font-size: 12px; fill: var(--muted); }
+  .chart .grid { stroke: var(--rule); stroke-width: 1; }
+  .chart .fit { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 7 5; fill: none; }
+  .chart .p { stroke: var(--paper); stroke-width: 1.5; cursor: pointer; }
+  .chart .p.cool { fill: var(--accent2); }
+  .chart .p.hot { fill: var(--accent); }
+  .chart .p.halt { fill: var(--card); stroke: var(--ink2); stroke-width: 2; }
+  .chart .p:focus { outline: none; stroke: var(--ink); stroke-width: 3; }
+  .chart .p.sel { stroke: var(--ink); stroke-width: 3; }
+  .chart .lab { fill: var(--ink); font-family: var(--display); font-size: 15px; font-weight: 600; }
+  .chart .lab.hot { fill: var(--accent); }
+  .readout { font-family: var(--mono); font-size: 13.5px; color: var(--ink); min-height: 1.6em; margin: 10px 0 0; }
+  .q3 { margin-top: 24px; border-top: 2px solid var(--ink); font-family: var(--sans); }
+  .q3 > div { display: grid; grid-template-columns: 8.5rem 1fr 4.6rem; gap: 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+  .q3 dt { font-size: 15px; color: var(--ink); font-weight: 600; }
+  .q3 dt small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+  .q3 .bar { display: block; height: 14px; background: var(--accent2); }
+  .q3 .bar.hi { background: var(--accent); }
+  .q3 dd { margin: 0; }
+  .q3 dd.v { font-family: var(--display); font-weight: 700; font-size: 26px; text-align: right; color: var(--ink); }
+  @media (max-width: 640px) { .q3 > div { grid-template-columns: 7.2rem 1fr 3.2rem; gap: 10px; } }
+  .bib { margin-top: 26px; border: 2px solid var(--ink); background: var(--card); }
+  .bib-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 9px 16px; background: var(--ink); color: var(--paper); font: 600 12px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+  .bib-body { display: grid; grid-template-columns: 1fr; gap: 6px 34px; padding: 18px 18px 20px; }
+  @media (min-width: 760px) { .bib-body { grid-template-columns: 1fr 1fr; } }
+  .field { margin: 0 0 16px; font-family: var(--sans); }
+  .field label { display: flex; justify-content: space-between; gap: 10px; font-size: 14.5px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .field output, .field .unit { font-family: var(--mono); font-weight: 400; color: var(--ink2); }
+  .field input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
+  .field input[type=text] { font: 600 26px/1.1 var(--display); letter-spacing: .03em; width: 8.5ch; padding: 6px 10px; border: 1px solid var(--edge); background: var(--paper); color: var(--ink); }
+  .field .hint { font-size: 13px; color: var(--muted); margin-top: 5px; }
+  .res { border-top: 1px solid var(--rule); padding-top: 14px; }
+  @media (min-width: 760px) { .res { border-top: 0; border-left: 1px solid var(--rule); padding: 0 0 0 30px; } }
+  .res .lbl { font: 600 11.5px/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  .res .big { font-family: var(--display); font-weight: 700; font-size: clamp(54px, 9vw, 84px); line-height: .95; color: var(--accent); margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
+  .res .delta { font-family: var(--display); font-weight: 600; font-size: 24px; color: var(--ink); margin: 0 0 12px; }
+  .res p { font-family: var(--sans); font-size: 14.5px; line-height: 1.5; color: var(--ink2); margin: 0 0 8px; max-width: none; }
+  .res .warn { color: var(--accent); }
 </style>
 </head>
 <body>
@@ -264,26 +311,26 @@
     <h1>Each degree of heat costs about a minute</h1>
 
     <p class="hero-sub">
-      I paired fourteen Boston Marathons with the temperature on the course that
-      day. The field's median finish time rises by about 1.0 minute for every °F
-      (r = 0.86, with the interrupted 2013 race left out of the fit). Going from a
-      50°F race to an 80°F race moves the median finish by about 31 minutes.
+      In 2006 it was 51°F on the Boston course and the middle of the field
+      finished in 3:45. In 2012 it was 81°F and the middle of the field finished
+      in 4:16. Across fourteen races the median finish rose 1.03 minutes for
+      every °F (r = 0.86, with the halted 2013 race left out of the fit).
     </p>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="../">Landing page</a>
+      <a class="btn btn-primary" href="#estimate">Price your own race day</a>
       <a class="textlink" href="https://github.com/lyhjeremy/marathon-heat-tax">Code and data on GitHub</a>
     </div>
 
     <div class="claims">
       <div class="claim">
-        <div class="n">r = 0.86</div>
-        <p>Pearson correlation between race-day temperature and the field median,
-           13 races (p = 0.0002). With 2013 included it is 0.82.</p>
+        <div class="n">1.03 min</div>
+        <p>OLS slope of the field median on race-day temperature, per °F
+           (standard error 0.19, 13 races).</p>
       </div>
       <div class="claim">
-        <div class="n">1.03 min</div>
-        <p>OLS slope per °F on the median finish time, standard error 0.19.</p>
+        <div class="n">r = 0.86</div>
+        <p>Pearson correlation, p = 0.0002. Put 2013 back in and it drops to 0.82.</p>
       </div>
       <div class="claim">
         <div class="n">+31 min</div>
@@ -291,9 +338,9 @@
            middle of the field.</p>
       </div>
       <div class="claim">
-        <div class="n">4:20</div>
-        <p>the slowest median in the set, 2004 at 73.6°F. 2012, the hottest race at
-           81.3°F, was next at 4:16.</p>
+        <div class="n">0.76 vs 1.35</div>
+        <p>minutes per °F at the 25th and 75th percentile of the field. Slower
+           runners lose more time to heat, in minutes and as a share of their time.</p>
       </div>
     </div>
   </section>
@@ -306,26 +353,26 @@
     <p class="eyebrow">Start: the question</p>
     <h2>How many minutes is "it was hot"?</h2>
     <p>
-      Runners blame the heat for a slow day all the time, and the excuse almost
-      never comes with a number attached. I wanted a price per degree for an
-      ordinary finisher, and the cleanest way I could think of to get one was to
-      watch the same race over many years.
+      Runners blame the heat for a slow day all the time, and the excuse rarely
+      comes with a number. I wanted a price per degree for an ordinary finisher.
     </p>
     <p>
-      Boston runs the same course every April with a qualifying field of broadly
-      similar runners, so when the median finish moves from one year to the next,
-      weather is the likeliest cause. Each year becomes one point: the median of between 13,422
-      and 31,939 finishers, set against that day's temperature.
+      Boston is a good place to look. The course is the same every April and the
+      field is a qualifying field of broadly similar runners, so when the median
+      moves from one year to the next, weather is the likeliest cause. Each year
+      gives one point: the median of between 13,422 and 31,939 finishers against
+      that day's temperature.
     </p>
   </section>
 
   <section class="stop stop--key">
     <p class="eyebrow">10 km: the scale</p>
-    <h2>Fourteen race days on one thermometer</h2>
+    <h2>The slow years are the hot years</h2>
     <p>
-      Twelve of the fourteen races fell between 45°F and 64°F. Leaving out the
-      halted 2013 race, their medians sit between 3:44 and 4:03. The two races
-      above 70°F are the two slowest fields in the set.
+      Twelve of the fourteen races fell between 45°F and 64°F, and leaving out
+      the halted 2013 race, their medians sit between 3:44 and 4:03. The only two
+      races above 70°F, 2004 and 2012, produced the two slowest fields. The years
+      either side of each were back near 3:45 to 3:50.
     </p>
     <figure class="thermo-fig">
       <div class="thermo-box">
@@ -385,57 +432,116 @@
 <text class="yr" x="156" y="612.0">2007</text><text class="tv" x="212" y="612.0">45.0°F</text><text class="mv" x="318" y="612.0">3:49</text>
 <text class="hd" x="156" y="18">YEAR</text><text class="hd" x="212" y="18">RACE DAY</text><text class="hd" x="318" y="18">MEDIAN</text>
 </svg>
-
       </div>
       <figcaption>Race-day temperature is the mean of hourly readings from 10:00 to
         16:00 near the course midpoint (Open-Meteo archive). Median finish is over
-        runners between 2 and 8 hours. Square markers in the accent color are the
-        two races above 70°F. *2013 was halted, so its median (3:29) is not comparable.</figcaption>
+        runners between 2 and 8 hours. Rust squares are the two races above 70°F.
+        *2013 was halted, so its median (3:29) is not comparable.</figcaption>
     </figure>
   </section>
 
   <section class="stop">
     <p class="eyebrow">21 km: the fit</p>
     <h2>A straight line through thirteen races</h2>
-    <div class="bignum">0.86</div>
-    <p class="bignum-note">Pearson r, race-day temperature against field median, 2013 excluded.</p>
     <p>
-      An ordinary least squares fit of median finish on temperature gives a slope
-      of 1.03 minutes per °F (standard error 0.19, p = 0.0002). Over the 30-degree
-      range from 50°F to 80°F that is 31 minutes on the median finish.
+      An ordinary least squares fit of median finish on temperature gives 1.03
+      minutes per °F (standard error 0.19, p = 0.0002). Over the 30 degrees from
+      50°F to 80°F that is 31 minutes. Switch the chart to the faster or slower
+      quarter of the field, or put 2013 back into the fit, and the line is
+      refitted in your browser from the same fourteen rows.
     </p>
-    <figure>
-      <div class="plate">
-        <img width="1720" height="1080" src="../figures/01_temp_vs_time.png" fetchpriority="high"
-          alt="Scatter of race-day temperature against field median finish time for fourteen Boston Marathons. The dashed fit rises about one minute per degree; 2012 and 2004 sit at the top right, and 2013 is drawn hollow below the line." />
+    <figure id="fit-fig">
+      <p class="fig-title" id="fit-title" aria-live="polite">Median runner: +1.03 min per °F</p>
+      <div class="ctl">
+        <div class="seg" role="group" aria-label="Which runner in the field">
+          <button type="button" data-k="3" aria-pressed="false">25th percentile</button>
+          <button type="button" data-k="2" aria-pressed="true">Median</button>
+          <button type="button" data-k="4" aria-pressed="false">75th percentile</button>
+        </div>
+        <label><input type="checkbox" id="inc13" /> Include 2013 in the fit</label>
       </div>
-      <figcaption>Each dot is one year's field median. 2013 is drawn hollow and left
-        out of the fit.</figcaption>
+      <div class="chart" id="fit-chart"></div>
+      <p class="readout" id="fit-read" aria-live="polite">Hover or tab to a point for its year.</p>
+      <noscript>
+        <div class="plate"><img width="1720" height="1080" src="../figures/01_temp_vs_time.png" alt="Scatter of race-day temperature against field median finish time for fourteen Boston Marathons. The dashed fit rises about one minute per degree; 2012 and 2004 sit at the top right, and 2013 is drawn hollow below the line." /></div>
+      </noscript>
+      <figcaption>Each point is one year. Rust points are the two races above 70°F;
+        the hollow point is 2013, which is left out of the fit unless you tick the box.
+        Values from <code>tables/heat_tax.csv</code>.</figcaption>
     </figure>
   </section>
 
-  <section class="stop">
-    <p class="eyebrow">30 km: year by year</p>
-    <h2>The slow years are the hot years</h2>
+  <section class="stop stop--key">
+    <p class="eyebrow">30 km: who pays</p>
+    <h2>Heat costs slower runners more</h2>
     <p>
-      Put in date order, the same data shows two spikes, 2004 and 2012, on an
-      otherwise flat line; the years either side of each spike are back near 3:45
-      to 3:50.
+      The quartile columns in the same table answer a second question. The runner
+      a quarter of the way down the field loses 0.76 minutes per °F; the runner
+      three quarters of the way down loses 1.35. As a share of finish time that is
+      0.36% per °F against 0.51%, so the gap is not only that a longer race has
+      more minutes to lose.
     </p>
-    <figure>
-      <div class="plate">
-        <img width="1800" height="960" src="../figures/02_median_by_year.png" loading="lazy"
-          alt="Bar chart of median finish time by year from 2001 to 2014, labeled with race-day temperature. The bars for 2004 (74 degrees) and 2012 (81 degrees) are the tallest." />
+    <dl class="q3" aria-label="Fitted minutes lost per degree Fahrenheit, by position in the field">
+      <div><dt>25th percentile<small>about 3:30</small></dt><dd class="b"><span class="bar" style="width:56%"></span></dd><dd class="v">0.76</dd></div>
+      <div><dt>Median<small>about 3:54</small></dt><dd class="b"><span class="bar" style="width:76%"></span></dd><dd class="v">1.03</dd></div>
+      <div><dt>75th percentile<small>about 4:23</small></dt><dd class="b"><span class="bar hi" style="width:100%"></span></dd><dd class="v">1.35</dd></div>
+    </dl>
+    <p style="margin-top:14px">
+      These slopes come from the same OLS fit run on the <code>p25</code> and
+      <code>p75</code> columns of <code>tables/heat_tax.csv</code>, 13 races, 2013
+      excluded; <code>analyze.py</code> itself reports only the median. The
+      typical times are the 13-race averages of each column.
+    </p>
+  </section>
+
+  <section class="stop" id="estimate">
+    <p class="eyebrow">35 km: your race</p>
+    <h2>Price your own race day</h2>
+    <p>
+      Enter a marathon time and the temperature you ran it in, then the forecast
+      for the next one. The estimate uses the rate for your part of the field:
+      0.36% of finish time per °F at 3:30, rising to 0.51% at 4:23, interpolated
+      in between and held at the end values outside that band.
+    </p>
+    <div class="bib">
+      <div class="bib-head"><span>Heat-adjusted finish</span><span>Boston 2001 to 2014 fit</span></div>
+      <div class="bib-body">
+        <div>
+          <div class="field">
+            <label for="est-time">Your marathon time <span class="unit">h:mm or h:mm:ss</span></label>
+            <input type="text" id="est-time" value="3:45" inputmode="numeric" autocomplete="off" spellcheck="false" />
+            <div class="hint" id="est-time-hint">Between 2:00 and 8:00.</div>
+          </div>
+          <div class="field">
+            <label for="est-t0">Temperature on that day <output id="est-t0-o" for="est-t0">50°F</output></label>
+            <input type="range" id="est-t0" min="35" max="90" step="1" value="50" />
+          </div>
+          <div class="field">
+            <label for="est-t1">Race-day forecast <output id="est-t1-o" for="est-t1">70°F</output></label>
+            <input type="range" id="est-t1" min="35" max="90" step="1" value="70" />
+          </div>
+        </div>
+        <div class="res" aria-live="polite">
+          <p class="lbl">Estimated finish</p>
+          <div class="big" id="est-out">&nbsp;</div>
+          <p class="delta" id="est-delta">&nbsp;</p>
+          <p id="est-pace"></p>
+          <p id="est-note"></p>
+        </div>
       </div>
-      <figcaption>Median finish by year, labeled with race-day temperature.</figcaption>
-    </figure>
+    </div>
+    <p style="margin-top:16px">
+      Read the answer as what the field does on average, at Boston, on days that
+      were warm for all the usual reasons. It cannot know how well you handle heat
+      or how humid your race will be.
+    </p>
   </section>
 
   <section class="stop stop--warn">
-    <p class="eyebrow">35 km: limitations</p>
+    <p class="eyebrow">40 km: limitations</p>
     <h2>What this doesn't show</h2>
     <p>
-      Thirteen points describe a relationship, and that is all they can do. Field
+      Thirteen points can describe a relationship but cannot prove a cause. Field
       size grew from 13,422 finishers in 2001 to 31,939 in 2014, and qualifying
       standards changed during the period. Either could move the median on its own.
     </p>
@@ -445,23 +551,9 @@
       would pull the line for reasons unrelated to weather.
     </p>
     <p>
-      Temperature here also stands in for humidity, sun and wind, which were not
-      modeled, so read the slope as the cost of a warm race day with all of those
-      folded in. The result is a field median and says nothing about how a given
-      runner responds to heat.
-    </p>
-  </section>
-
-  <section class="stop">
-    <p class="eyebrow">40 km: using it</p>
-    <h2>Set the goal from the forecast</h2>
-    <p>
-      The slope is most useful before the race. A forecast 15°F warmer than your
-      training conditions implies a median-runner finish about 15 minutes slower.
-      The same rule feeds the heat adjustment in
-      <a href="https://lyhjeremy.github.io/race-day-copilot/">Race Day Copilot</a>
-      and a knowledge card in
-      <a href="https://lyhjeremy.github.io/marathon-strategy-rag/">Marathon Strategy RAG</a>.
+      Temperature also stands in for humidity, sun and wind, none of which were
+      modeled. The slope is the cost of a warm Boston race day with all of those
+      folded in, measured on the field and not on any one runner.
     </p>
   </section>
 
@@ -469,10 +561,14 @@
     <p class="eyebrow">Finish: how it was built</p>
     <h2>Where the numbers come from</h2>
     <p>
-      <code>fetch_data.py</code> downloads the results and the weather;
-      <code>analyze.py</code> computes each year's median, fits the line with
-      <code>scipy.stats.linregress</code> and writes the figures and
-      <code>tables/heat_tax.csv</code>. Raw downloads are git-ignored.
+      <code>fetch_data.py</code> downloads the results and the weather.
+      <code>analyze.py</code> computes each year's median and quartiles, fits the
+      line with <code>scipy.stats.linregress</code> and writes the figures and
+      <code>tables/heat_tax.csv</code>. Raw downloads are git-ignored. The same
+      rule feeds the heat adjustment in
+      <a href="https://lyhjeremy.github.io/race-day-copilot/">Race Day Copilot</a>
+      and a knowledge card in
+      <a href="https://lyhjeremy.github.io/marathon-strategy-rag/">Marathon Strategy RAG</a>.
     </p>
     <dl class="specs">
       <div class="spec"><dt>Results</dt><dd>Boston Marathon official finish times 2001 to 2014, from the public <a href="https://github.com/llimllib/bostonmarathon">llimllib/bostonmarathon</a> mirror</dd></div>
@@ -480,7 +576,7 @@
       <div class="spec"><dt>Filter</dt><dd>Finish times between 120 and 480 minutes</dd></div>
       <div class="spec"><dt>Model</dt><dd>Pearson correlation and OLS of median finish on temperature, 13 races</dd></div>
       <div class="spec"><dt>Excluded</dt><dd>2013, halted mid-race</dd></div>
-      <div class="spec"><dt>Stack</dt><dd>Python, pandas, SciPy, matplotlib</dd></div>
+      <div class="spec"><dt>Stack</dt><dd>Python, pandas, SciPy, matplotlib; the charts on this page are plain SVG drawn from the CSV</dd></div>
     </dl>
   </section>
 
@@ -506,5 +602,95 @@
     <p>Results data © the Boston Athletic Association, via a public mirror. Weather by Open-Meteo.</p>
   </footer>
 </div>
+
+<script>
+(function () {
+  // year, temp_F, median_min, p25, p75, n  (tables/heat_tax.csv)
+  var D = [[2001,51.3,227.48,204.21,255.18,13422],[2002,63.9,226.0,201.85,253.43,14590],[2003,58.9,238.63,213.98,268.83,17042],[2004,73.6,259.6,231.27,292.52,16745],[2005,64.2,243.33,216.68,275.9,17541],[2006,51.4,224.75,205.47,249.7,19696],[2007,45.0,228.62,208.29,254.48,20355],[2008,57.7,226.18,205.53,251.58,21963],[2009,48.7,224.02,204.52,248.35,22882],[2010,52.3,224.3,204.82,248.7,22687],[2011,54.0,224.92,204.03,249.72,23922],[2012,81.3,255.8,228.75,290.7,21548],[2013,52.7,209.32,191.85,225.28,16127],[2014,60.0,232.42,205.66,273.3,31939]];
+  var NAME = {2: "Median runner", 3: "25th percentile", 4: "75th percentile"};
+  var NS = "http://www.w3.org/2000/svg";
+  function hm(m) { var h = Math.floor(m / 60), r = Math.round(m - h * 60); if (r === 60) { h++; r = 0; } return h + ":" + (r < 10 ? "0" : "") + r; }
+  function hms(m) { var s = Math.round(m * 60), h = Math.floor(s / 3600), mm = Math.floor(s % 3600 / 60), ss = s % 60; return h + ":" + (mm < 10 ? "0" : "") + mm + ":" + (ss < 10 ? "0" : "") + ss; }
+  function ols(rows, k) {
+    var n = rows.length, sx = 0, sy = 0, sxx = 0, sxy = 0, syy = 0;
+    rows.forEach(function (r) { var x = r[1], y = r[k]; sx += x; sy += y; sxx += x * x; sxy += x * y; syy += y * y; });
+    var b = (n * sxy - sx * sy) / (n * sxx - sx * sx), a = (sy - b * sx) / n;
+    var rr = (n * sxy - sx * sy) / Math.sqrt((n * sxx - sx * sx) * (n * syy - sy * sy));
+    return { b: b, a: a, r: rr, mean: sy / n };
+  }
+  function el(tag, at, parent, txt) { var e = document.createElementNS(NS, tag); for (var k in at) e.setAttribute(k, at[k]); if (txt != null) e.textContent = txt; if (parent) parent.appendChild(e); return e; }
+
+  // ---- fit chart ----
+  var box = document.getElementById("fit-chart"), title = document.getElementById("fit-title"),
+      read = document.getElementById("fit-read"), inc = document.getElementById("inc13"),
+      btns = document.querySelectorAll("#fit-fig .seg button"), K = 2, sel = null;
+  function draw() {
+    var W = Math.max(300, box.clientWidth - 20), H = W < 560 ? 300 : 380;
+    var L = 46, R = 14, T = 14, B = 40;
+    var ys = D.map(function (r) { return r[K]; });
+    var y0 = Math.floor((Math.min.apply(null, ys) - 6) / 10) * 10, y1 = Math.ceil((Math.max.apply(null, ys) + 6) / 10) * 10;
+    var X = function (v) { return L + (v - 42) / (86 - 42) * (W - L - R); };
+    var Y = function (v) { return T + (y1 - v) / (y1 - y0) * (H - T - B); };
+    box.innerHTML = "";
+    var s = el("svg", { viewBox: "0 0 " + W + " " + H, width: W, height: H, role: "img",
+      "aria-label": "Scatter of race-day temperature against " + NAME[K].toLowerCase() + " finish time, one point per year, with a fitted line" }, box);
+    var step = (y1 - y0) > 70 ? 20 : 10;
+    for (var v = y0; v <= y1; v += step) { el("line", { class: "grid", x1: L, x2: W - R, y1: Y(v), y2: Y(v) }, s); el("text", { x: L - 6, y: Y(v) + 4, "text-anchor": "end" }, s, hm(v)); }
+    for (var t = 45; t <= 85; t += 10) el("text", { x: X(t), y: H - B + 18, "text-anchor": "middle" }, s, t + "°F");
+    el("text", { x: W - R, y: H - 6, "text-anchor": "end" }, s, "race-day temperature");
+    var rows = D.filter(function (r) { return inc.checked || r[0] !== 2013; });
+    var f = ols(rows, K);
+    el("line", { class: "fit", x1: X(44), y1: Y(f.a + f.b * 44), x2: X(83), y2: Y(f.a + f.b * 83) }, s);
+    D.forEach(function (r) {
+      var cls = r[0] === 2013 && !inc.checked ? "halt" : (r[1] > 70 ? "hot" : "cool");
+      var c = el("circle", { class: "p " + cls + (sel === r[0] ? " sel" : ""), cx: X(r[1]), cy: Y(r[K]), r: W < 560 ? 6.5 : 7.5, tabindex: 0,
+        "aria-label": r[0] + ", " + r[1] + " degrees, " + hm(r[K]) }, s);
+      var show = function () { sel = r[0]; s.querySelectorAll(".p").forEach(function (p) { p.classList.remove("sel"); }); c.classList.add("sel");
+        read.textContent = r[0] + (r[0] === 2013 ? " (halted)" : "") + "  ·  " + r[1].toFixed(1) + "°F  ·  " + NAME[K].toLowerCase() + " " + hm(r[K]) + "  ·  " + r[5].toLocaleString("en-US") + " finishers"; };
+      c.addEventListener("mouseenter", show); c.addEventListener("focus", show); c.addEventListener("click", show);
+      if (r[1] > 70 || r[0] === 2013) el("text", { class: "lab" + (r[1] > 70 ? " hot" : ""), x: X(r[1]) + (r[0] === 2012 ? -4 : 12), y: Y(r[K]) + (r[0] === 2012 ? 24 : 5), "text-anchor": r[0] === 2012 ? "end" : "start" }, s, r[0] === 2013 ? "2013*" : String(r[0]));
+    });
+    title.textContent = NAME[K] + ": " + (f.b >= 0 ? "+" : "") + f.b.toFixed(2) + " min per °F, r = " + f.r.toFixed(2) + (inc.checked ? " (2013 included)" : "");
+  }
+  btns.forEach(function (b) { b.addEventListener("click", function () { K = +b.dataset.k; btns.forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); }); draw(); }); });
+  inc.addEventListener("change", draw);
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(draw, 120); });
+  draw();
+
+  // ---- estimator ----
+  var fit13 = D.filter(function (r) { return r[0] !== 2013; });
+  // anchors: (typical time of that quantile, fitted share of time lost per °F)
+  var A = [3, 2, 4].map(function (k) { var f = ols(fit13, k); return [f.mean, f.b / f.mean]; });
+  function rate(m) {
+    if (m <= A[0][0]) return A[0][1];
+    if (m >= A[2][0]) return A[2][1];
+    var i = m < A[1][0] ? 0 : 1, u = (m - A[i][0]) / (A[i + 1][0] - A[i][0]);
+    return A[i][1] + u * (A[i + 1][1] - A[i][1]);
+  }
+  var tIn = document.getElementById("est-time"), t0 = document.getElementById("est-t0"), t1 = document.getElementById("est-t1");
+  function parse(s) { var p = s.trim().split(/[:.\s]+/).map(Number); if (p.some(isNaN) || p.length < 2 || p.length > 3) return null; return p[0] * 60 + p[1] + (p[2] || 0) / 60; }
+  function c(f) { return Math.round((f - 32) * 5 / 9); }
+  function est() {
+    document.getElementById("est-t0-o").textContent = t0.value + "°F (" + c(+t0.value) + "°C)";
+    document.getElementById("est-t1-o").textContent = t1.value + "°F (" + c(+t1.value) + "°C)";
+    var m = parse(tIn.value), hint = document.getElementById("est-time-hint");
+    if (m == null || m < 120 || m > 480) { hint.textContent = "Enter a time between 2:00 and 8:00, like 3:45 or 4:12:30."; hint.className = "hint warn"; return; }
+    hint.textContent = "Between 2:00 and 8:00."; hint.className = "hint";
+    var dT = t1.value - t0.value, k = rate(m), d = m * k * dT, out = m + d;
+    document.getElementById("est-out").textContent = hms(out);
+    var ad = Math.abs(d), sg = d > 0.0083 ? "+" : (d < -0.0083 ? "−" : "");
+    document.getElementById("est-delta").textContent = sg + Math.floor(ad) + " min " + Math.round((ad % 1) * 60) + " s";
+    var pk = out / 42.195, pm = out / 26.2188;
+    function pace(x) { var s = Math.round(x * 60); return Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + s % 60; }
+    document.getElementById("est-pace").textContent = "Pace " + pace(pk) + " per km, " + pace(pm) + " per mile. Rate used: " + (k * 100).toFixed(2) + "% of finish time per °F.";
+    var notes = [];
+    if (+t0.value < 45 || +t0.value > 82 || +t1.value < 45 || +t1.value > 82) notes.push("A temperature outside 45 to 81°F is beyond the races in the data, so the line is being extended past what was measured.");
+    if (dT < 0) notes.push("A cooler forecast runs the same line backwards. Very cold days were not in the data.");
+    var n = document.getElementById("est-note"); n.textContent = notes.join(" "); n.className = notes.length ? "warn" : "";
+  }
+  [tIn, t0, t1].forEach(function (e) { e.addEventListener("input", est); });
+  est();
+})();
+</script>
 </body>
 </html>

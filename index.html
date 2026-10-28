@@ -57,6 +57,20 @@
   .links a.btn { background: var(--ink); color: var(--paper); padding: 12px 22px; text-decoration: none; border: 1px solid var(--ink); }
   .links a.btn:hover { background: var(--signal-2); border-color: var(--signal-2); }
   .links a { padding: 12px 0; }
+  .chart { border: 1px solid var(--rule); background: var(--panel); padding: 10px 10px 4px; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart text { font-family: var(--font-mono); font-size: 12px; fill: var(--ink-2); }
+  .chart .grid { stroke: var(--rule); stroke-width: 1; }
+  .chart .fit { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 7 5; fill: none; }
+  .chart .p { stroke: var(--paper); stroke-width: 1.5; cursor: pointer; }
+  .chart .p.cool { fill: var(--signal-2); }
+  .chart .p.hot { fill: var(--signal); }
+  .chart .p.halt { fill: var(--panel); stroke: var(--ink-2); stroke-width: 2; }
+  .chart .p:focus { outline: none; stroke: var(--ink); stroke-width: 3; }
+  .chart .p.sel { stroke: var(--ink); stroke-width: 3; }
+  .chart .lab { fill: var(--ink); font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+  .chart .lab.hot { fill: var(--signal); }
+  .readout { font-family: var(--font-mono); font-size: 13.5px; color: var(--ink); min-height: 1.6em; margin: 10px 0 0; }
   footer { margin: 70px 0 0; padding: 22px 0 54px; border-top: 1px solid var(--rule); font: 400 14px/1.6 var(--font-body); color: var(--ink-2); }
   footer a { color: var(--ink-2); }
   code { font-family: var(--font-mono); font-size: .86em; }
@@ -75,14 +89,15 @@
 
   <h1>Each degree of heat costs about a minute</h1>
   <p class="lede">I paired fourteen Boston Marathons with the temperature on the course that day.
-    The field's median finish time goes up by about 1.0 minute for every °F.</p>
+    The field's median finish time goes up by about 1.0 minute for every °F: 3:45 on a 51°F day in 2006, 4:16 on an 81°F day in 2012.</p>
 
   <figure>
-    <div class="plate">
-      <img src="figures/01_temp_vs_time.png" width="1720" height="1080" fetchpriority="high"
-        alt="Scatter of race-day temperature against field median finish time for fourteen Boston Marathons. The dashed fit rises about one minute per degree, r = 0.86; 2012 at 81 degrees and 2004 at 74 degrees sit at the top right, and the halted 2013 race is drawn hollow below the line." />
-    </div>
-    <figcaption>Each dot is one year's field median, from <code>analyze.py</code>. The dashed line is an OLS fit over 13 races; 2013 (hollow) is left out because the race was halted.</figcaption>
+    <div class="chart" id="fit-chart"></div>
+    <p class="readout" id="fit-read" aria-live="polite">Hover or tab to a point for its year.</p>
+    <noscript><div class="plate"><img src="figures/01_temp_vs_time.png" width="1720" height="1080"
+        alt="Scatter of race-day temperature against field median finish time for fourteen Boston Marathons. The dashed fit rises about one minute per degree, r = 0.86; 2012 at 81 degrees and 2004 at 74 degrees sit at the top right, and the halted 2013 race is drawn hollow below the line." /></div></noscript>
+    <figcaption>Each point is one year's field median, from <code>tables/heat_tax.csv</code>. Rust points are the two races above 70°F. The dashed line is an OLS fit over 13 races; 2013 (hollow) is left out because the race was halted.
+      <a href="overview/#estimate">Work out what a forecast means for your own time.</a></figcaption>
   </figure>
 
   <div class="narrow">
@@ -141,5 +156,38 @@
     Results data © the Boston Athletic Association, via a public mirror. Weather by Open-Meteo.
   </footer>
 </main>
+<script>
+(function () {
+  // year, temp_F, median_min, n  (tables/heat_tax.csv)
+  var D = [[2001,51.3,227.48,13422],[2002,63.9,226.0,14590],[2003,58.9,238.63,17042],[2004,73.6,259.6,16745],[2005,64.2,243.33,17541],[2006,51.4,224.75,19696],[2007,45.0,228.62,20355],[2008,57.7,226.18,21963],[2009,48.7,224.02,22882],[2010,52.3,224.3,22687],[2011,54.0,224.92,23922],[2012,81.3,255.8,21548],[2013,52.7,209.32,16127],[2014,60.0,232.42,31939]];
+  var NS = "http://www.w3.org/2000/svg", box = document.getElementById("fit-chart"), read = document.getElementById("fit-read");
+  function hm(m) { var h = Math.floor(m / 60), r = Math.round(m - h * 60); if (r === 60) { h++; r = 0; } return h + ":" + (r < 10 ? "0" : "") + r; }
+  function el(tag, at, parent, txt) { var e = document.createElementNS(NS, tag); for (var k in at) e.setAttribute(k, at[k]); if (txt != null) e.textContent = txt; if (parent) parent.appendChild(e); return e; }
+  var fit = D.filter(function (r) { return r[0] !== 2013; }), n = fit.length, sx = 0, sy = 0, sxx = 0, sxy = 0;
+  fit.forEach(function (r) { sx += r[1]; sy += r[2]; sxx += r[1] * r[1]; sxy += r[1] * r[2]; });
+  var b = (n * sxy - sx * sy) / (n * sxx - sx * sx), a = (sy - b * sx) / n;
+  function draw() {
+    var W = Math.max(300, box.clientWidth - 20), H = W < 560 ? 300 : 400, L = 46, R = 14, T = 14, B = 40, y0 = 200, y1 = 270;
+    var X = function (v) { return L + (v - 42) / (86 - 42) * (W - L - R); }, Y = function (v) { return T + (y1 - v) / (y1 - y0) * (H - T - B); };
+    box.innerHTML = "";
+    var s = el("svg", { viewBox: "0 0 " + W + " " + H, width: W, height: H, role: "img", "aria-label": "Scatter of race-day temperature against median finish time for fourteen Boston Marathons. The fitted line rises 1.03 minutes per degree; 2004 and 2012 sit top right and 2013 is hollow, below the line." }, box);
+    for (var v = y0; v <= y1; v += 10) { el("line", { class: "grid", x1: L, x2: W - R, y1: Y(v), y2: Y(v) }, s); el("text", { x: L - 6, y: Y(v) + 4, "text-anchor": "end" }, s, hm(v)); }
+    for (var t = 45; t <= 85; t += 10) el("text", { x: X(t), y: H - B + 18, "text-anchor": "middle" }, s, t + "°F");
+    el("text", { x: W - R, y: H - 6, "text-anchor": "end" }, s, "race-day temperature");
+    el("line", { class: "fit", x1: X(44), y1: Y(a + b * 44), x2: X(83), y2: Y(a + b * 83) }, s);
+    D.forEach(function (r) {
+      var cls = r[0] === 2013 ? "halt" : (r[1] > 70 ? "hot" : "cool");
+      var c = el("circle", { class: "p " + cls, cx: X(r[1]), cy: Y(r[2]), r: W < 560 ? 6.5 : 7.5, tabindex: 0, "aria-label": r[0] + ", " + r[1] + " degrees, median " + hm(r[2]) }, s);
+      var show = function () { s.querySelectorAll(".p").forEach(function (p) { p.classList.remove("sel"); }); c.classList.add("sel");
+        read.textContent = r[0] + (r[0] === 2013 ? " (halted)" : "") + "  ·  " + r[1].toFixed(1) + "°F  ·  median " + hm(r[2]) + "  ·  " + r[3].toLocaleString("en-US") + " finishers"; };
+      c.addEventListener("mouseenter", show); c.addEventListener("focus", show); c.addEventListener("click", show);
+      if (r[1] > 70 || r[0] === 2013) el("text", { class: "lab" + (r[1] > 70 ? " hot" : ""), x: X(r[1]) + (r[0] === 2012 ? -4 : 12), y: Y(r[2]) + (r[0] === 2012 ? 24 : 5), "text-anchor": r[0] === 2012 ? "end" : "start" }, s, r[0] === 2013 ? "2013*" : String(r[0]));
+    });
+    el("text", { class: "lab", x: L + 10, y: Y(265) }, s, "Dashed fit: +" + b.toFixed(2) + " min per °F");
+  }
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(draw, 120); });
+  draw();
+})();
+</script>
 </body>
 </html>
