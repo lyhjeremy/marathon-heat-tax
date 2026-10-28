@@ -1,6 +1,6 @@
 # The Heat Tax
 
-How much does race-day heat slow a marathon field? Fourteen Boston Marathons (2001 to 2014), each paired with the temperature on the course that day.
+How much does race-day heat slow a marathon field? I lined up fourteen Boston Marathons (2001 to 2014) against the temperature on the course each day, and the answer came out close to a minute per degree.
 
 [Live site](https://lyhjeremy.github.io/marathon-heat-tax/) · [Write-up](https://lyhjeremy.github.io/marathon-heat-tax/overview/)
 
@@ -48,7 +48,7 @@ Official Boston Marathon results 2001 to 2014 via [llimllib/bostonmarathon](http
 
 ## Limitations
 
-Thirteen points describe a relationship and don't establish cause. Field size more than doubled over the period and qualifying standards changed, and either could move the median. Humidity, sun and wind were not modeled, so the slope is the cost of a warm race day rather than of air temperature alone. The result is about a field median, not any one runner.
+Thirteen points describe a relationship; they can't show cause. Field size more than doubled over the period and qualifying standards changed, and either could move the median. Humidity, sun and wind were not modeled, so read the slope as the cost of a warm race day, with whatever else a warm day brings. It describes the field median and says nothing about how any one runner handles heat.
 
 ## License
 
