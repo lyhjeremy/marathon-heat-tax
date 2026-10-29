@@ -1,0 +1,6 @@
+what,slope_min_per_F
+"2026-06 result: llimllib official times, 10-16h temperature at one point, OLS, 13 races",1.026
+"same 13 races, adrian3 net times and the new course-average weather window, OLS",0.755
+"new model at the median, spline trend, per F above the knot, 16 races 1998-2014",0.949
+"old line applied to 2015-2019 medians: mean abs error, min",8.79
+"new model on 2015-2019 medians, trend held at 2014: mean abs error, min",6.25

@@ -1,6 +1,7 @@
 """
-analyze.py - The Heat Tax: how much does temperature slow a marathon field?
-===========================================================================
+legacy_2001_2014.py: the original June 2026 analysis, kept so its numbers can be rebuilt.
+(Superseded by build_dataset.py and model_fit.py in the October 2026 upgrade.)
+
 For each Boston Marathon 2001-2014 we compute the field's median finish time and
 pair it with the race-day temperature, then measure the relationship.
 
@@ -19,7 +20,8 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 
 HERE = os.path.dirname(__file__)
-FIG = os.path.join(HERE, "figures"); TAB = os.path.join(HERE, "tables"); DATA = os.path.join(HERE, "data")
+FIG = os.path.join(HERE, "figures"); TAB = os.path.join(HERE, "tables")
+CACHE = os.path.expanduser("~/data-cache/marathon-heat-tax")
 INK, GOLD, TEAL, CORAL = "#1a1a2e", "#D4A537", "#15868C", "#E0567A"
 plt.rcParams.update({"figure.dpi": 200, "savefig.dpi": 200, "font.size": 12,
     "axes.edgecolor": "#888", "axes.grid": True, "grid.color": "#e8e2d4",
@@ -27,11 +29,12 @@ plt.rcParams.update({"figure.dpi": 200, "savefig.dpi": 200, "font.size": 12,
 
 
 def field_summary():
-    wx = pd.read_csv(os.path.join(DATA, "weather.csv"))
+    # the original single-point weather pull (10:00-16:00 at 42.30 N, 71.35 W), cached
+    wx = pd.read_csv(os.path.join(CACHE, "legacy", "weather.csv"))
     rows = []
     for _, w in wx.iterrows():
         y = int(w["year"])
-        df = pd.read_csv(os.path.join(DATA, f"boston_{y}.csv"))
+        df = pd.read_csv(os.path.join(CACHE, "llimllib", f"boston_{y}.csv"))
         off = pd.to_numeric(df["official"], errors="coerce")
         off = off[(off >= 120) & (off <= 480)]
         rows.append({"year": y, "temp_F": w["temp_midday_F"], "temp_max_F": w["temp_max_F"],

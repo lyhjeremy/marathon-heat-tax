@@ -3,14 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>The Heat Tax: about a minute per degree across 14 Boston Marathons</title>
-<meta name="description" content="Fourteen Boston Marathons (2001 to 2014) paired with race-day temperature. The field's median finish rises about 1.0 minute per °F (r = 0.86, 2013 excluded). A 50°F to 80°F swing is worth about 31 minutes." />
+<title>The Heat Tax: 80 Boston Marathons against race-day weather</title>
+<meta name="description" content="Boston Marathon results from 1940 to 2019 against ERA5 weather on the course. Above 55°F the median finisher loses about 0.42% of their time per °F, close to a minute; dew point adds nothing that temperature does not already explain. A forecast tool prices your own race day." />
 <meta name="theme-color" content="#ECEBE6" />
 <meta property="og:title" content="The Heat Tax" />
-<meta property="og:description" content="Fourteen Boston Marathons against race-day temperature. Each degree costs the median runner about a minute." />
+<meta property="og:description" content="80 Boston Marathons against race-day weather: above 55°F each degree costs the median runner about 0.4% of their time. Price your own race day from a live forecast." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lyhjeremy.github.io/marathon-heat-tax/overview/" />
-<link href="" rel="stylesheet" />
 <style>
   :root {
     --paper: #ECEBE6;
@@ -235,112 +234,57 @@
   .stop .eyebrow { color: var(--accent2); }
 
 
-  .thermo-fig { margin-top: 30px; }
-  .thermo-box { border: 1px solid var(--rule); background: var(--card); padding: 18px 10px 10px; max-width: 520px; }
-  .thermo { display: block; width: 100%; height: auto; font-family: var(--mono); }
-  .thermo .tube { fill: var(--paper); stroke: var(--edge); stroke-width: 1.5; }
-  .thermo .tick { stroke: var(--edge); stroke-width: 1; }
-  .thermo .tl { fill: var(--muted); font-size: 13px; }
-  .thermo .lead { fill: none; stroke: var(--rule); stroke-width: 1; }
-  .thermo .pt { fill: var(--accent2); }
-  .thermo .pt.hot { fill: var(--accent); }
-  .thermo .pt.open { fill: var(--paper); stroke: var(--accent2); stroke-width: 2; }
-  .thermo .yr { fill: var(--ink); font-size: 18px; font-weight: 600; font-family: var(--display); letter-spacing: .02em; }
-  .thermo .tv { fill: var(--ink2); font-size: 15px; }
-  .thermo .mv { fill: var(--ink); font-size: 15px; }
-  .thermo .hotlab { fill: var(--accent); }
-  .thermo .hd { fill: var(--muted); font-size: 11.5px; letter-spacing: .12em; }
-  .stop .fig-title, .fig-title { font-family: var(--display); font-weight: 600; font-size: clamp(22px, 2.8vw, 28px); line-height: 1.1; margin: 0 0 4px; color: var(--ink); }
-  .ctl { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 14px 0 12px; font-family: var(--sans); font-size: 14.5px; color: var(--ink2); }
-  .seg { display: inline-flex; flex-wrap: wrap; }
-  .seg button { font: 600 14px/1.2 var(--sans); padding: 9px 13px; border: 1px solid var(--edge); background: transparent; color: var(--ink); cursor: pointer; margin: 0 -1px -1px 0; }
-  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .ctl label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
-  .ctl input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; }
-  .chart { border: 1px solid var(--rule); background: var(--card); padding: 10px 10px 4px; }
-  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
-  .chart text { font-family: var(--mono); font-size: 12px; fill: var(--muted); }
-  .chart .grid { stroke: var(--rule); stroke-width: 1; }
-  .chart .fit { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 7 5; fill: none; }
-  .chart .p { stroke: var(--paper); stroke-width: 1.5; cursor: pointer; }
-  .chart .p.cool { fill: var(--accent2); }
-  .chart .p.hot { fill: var(--accent); }
-  .chart .p.halt { fill: var(--card); stroke: var(--ink2); stroke-width: 2; }
-  .chart .p:focus { outline: none; stroke: var(--ink); stroke-width: 3; }
-  .chart .p.sel { stroke: var(--ink); stroke-width: 3; }
-  .chart .lab { fill: var(--ink); font-family: var(--display); font-size: 15px; font-weight: 600; }
-  .chart .lab.hot { fill: var(--accent); }
-  .readout { font-family: var(--mono); font-size: 13.5px; color: var(--ink); min-height: 1.6em; margin: 10px 0 0; }
-  .q3 { margin-top: 24px; border-top: 2px solid var(--ink); font-family: var(--sans); }
-  .q3 > div { display: grid; grid-template-columns: 8.5rem 1fr 4.6rem; gap: 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--rule); }
-  .q3 dt { font-size: 15px; color: var(--ink); font-weight: 600; }
-  .q3 dt small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
-  .q3 .bar { display: block; height: 14px; background: var(--accent2); }
-  .q3 .bar.hi { background: var(--accent); }
-  .q3 dd { margin: 0; }
-  .q3 dd.v { font-family: var(--display); font-weight: 700; font-size: 26px; text-align: right; color: var(--ink); }
-  @media (max-width: 640px) { .q3 > div { grid-template-columns: 7.2rem 1fr 3.2rem; gap: 10px; } }
-  .bib { margin-top: 26px; border: 2px solid var(--ink); background: var(--card); }
-  .bib-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 9px 16px; background: var(--ink); color: var(--paper); font: 600 12px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
-  .bib-body { display: grid; grid-template-columns: 1fr; gap: 6px 34px; padding: 18px 18px 20px; }
-  @media (min-width: 760px) { .bib-body { grid-template-columns: 1fr 1fr; } }
-  .field { margin: 0 0 16px; font-family: var(--sans); }
-  .field label { display: flex; justify-content: space-between; gap: 10px; font-size: 14.5px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
-  .field output, .field .unit { font-family: var(--mono); font-weight: 400; color: var(--ink2); }
-  .field input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
-  .field input[type=text] { font: 600 26px/1.1 var(--display); letter-spacing: .03em; width: 8.5ch; padding: 6px 10px; border: 1px solid var(--edge); background: var(--paper); color: var(--ink); }
-  .field .hint { font-size: 13px; color: var(--muted); margin-top: 5px; }
-  .res { border-top: 1px solid var(--rule); padding-top: 14px; }
-  @media (min-width: 760px) { .res { border-top: 0; border-left: 1px solid var(--rule); padding: 0 0 0 30px; } }
-  .res .lbl { font: 600 11.5px/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0; }
-  .res .big { font-family: var(--display); font-weight: 700; font-size: clamp(54px, 9vw, 84px); line-height: .95; color: var(--accent); margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
-  .res .delta { font-family: var(--display); font-weight: 600; font-size: 24px; color: var(--ink); margin: 0 0 12px; }
-  .res p { font-family: var(--sans); font-size: 14.5px; line-height: 1.5; color: var(--ink2); margin: 0 0 8px; max-width: none; }
-  .res .warn { color: var(--accent); }
+  .stop .tablewrap table { min-width: 520px; }
+  .stop .tablewrap.narrow-ok table { min-width: 0; }
+  .flag { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin: 18px 0; }
 </style>
 </head>
 <body>
+<link rel="stylesheet" href="../assets/heat.css">
+
 <div class="wrap">
   <header class="masthead">
     <div class="logo"><span class="dot" aria-hidden="true"></span>The Heat Tax</div>
-    <div class="tagline">Boston Marathon results and race-day weather, 2001 to 2014</div>
+    <div class="tagline">Boston Marathon results and race-day weather, 1940 to 2019</div>
   </header>
 
   <section class="hero">
-    <p class="kicker">14 races, 280,459 finishers, one course</p>
-    <h1>Each degree of heat costs about a minute</h1>
+    <p class="kicker">80 races, 614,738 finish times, one course</p>
+    <h1>Above 55°F, each degree costs about 0.4% of your time</h1>
 
     <p class="hero-sub">
-      In 2006 it was 51°F on the Boston course and the middle of the field
-      finished in 3:45. In 2012 it was 81°F and the middle of the field finished
-      in 4:16. Across fourteen races the median finish rose 1.03 minutes for
-      every °F (r = 0.86, with the halted 2013 race left out of the fit).
+      I lined up every Boston Marathon from 1940 to 2019 against the weather on the
+      course that day. Below about 55°F the temperature makes no measurable
+      difference. Above it, the median finisher loses 0.42% of their time per °F,
+      which is 0.95 minutes at a 3:47 finish. The share is similar from the front
+      of the race to the back, so slower runners lose more minutes.
     </p>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="#estimate">Price your own race day</a>
+      <a class="btn btn-primary" href="#forecast">Price your own race day</a>
       <a class="textlink" href="https://github.com/lyhjeremy/marathon-heat-tax">Code and data on GitHub</a>
     </div>
 
     <div class="claims">
       <div class="claim">
-        <div class="n">1.03 min</div>
-        <p>OLS slope of the field median on race-day temperature, per °F
-           (standard error 0.19, 13 races).</p>
+        <div class="n">0.42%</div>
+        <p>of finish time per °F above 55°F for the median runner, 90% bootstrap
+           interval 0.20 to 0.52 (16 races, 1998 to 2014).</p>
       </div>
       <div class="claim">
-        <div class="n">r = 0.86</div>
-        <p>Pearson correlation, p = 0.0002. Put 2013 back in and it drops to 0.82.</p>
+        <div class="n">55°F</div>
+        <p>the point where heat starts to cost time, picked by cross-validation from
+           40°F to 60°F. A straight line through all temperatures fits worse.</p>
       </div>
       <div class="claim">
-        <div class="n">+31 min</div>
-        <p>the fitted gap between a 50°F and an 80°F race for the runner in the
-           middle of the field.</p>
+        <div class="n">0</div>
+        <p>extra skill from dew point. On its own it predicted nothing, and added to
+           temperature it made predictions worse.</p>
       </div>
       <div class="claim">
-        <div class="n">0.76 vs 1.35</div>
-        <p>minutes per °F at the 25th and 75th percentile of the field. Slower
-           runners lose more time to heat, in minutes and as a share of their time.</p>
+        <div class="n">2.26% vs 2.15%</div>
+        <p>average error on the held-out 2015 to 2019 races, with weather and without.
+           The model got 2015 and 2016 right and 2018 badly wrong.</p>
       </div>
     </div>
   </section>
@@ -353,207 +297,397 @@
     <p class="eyebrow">Start: the question</p>
     <h2>How many minutes is "it was hot"?</h2>
     <p>
-      Runners blame the heat for a slow day all the time, and the excuse rarely
-      comes with a number. I wanted a price per degree for an ordinary finisher.
+      The first version of this page, in June 2026, used fourteen Boston Marathons
+      (2001 to 2014) and found that the median finish rose 1.03 minutes per °F
+      (r = 0.86). That was a straight line through thirteen points, with gun times
+      in some years and chip times in others, and nothing to separate the weather
+      from a field that was growing and changing.
     </p>
     <p>
-      Boston is a good place to look. The course is the same every April and the
-      field is a qualifying field of broadly similar runners, so when the median
-      moves from one year to the next, weather is the likeliest cause. Each year
-      gives one point: the median of between 13,422 and 31,939 finishers against
-      that day's temperature.
+      This version, from October 2026, uses 80 races, weather from a reanalysis at
+      three points on the course, wind along the course, and a long-run trend for
+      the field. It holds back the five most recent races (2015 to 2019), fits on
+      the rest, and then checks whether the model predicts those five. It also
+      ships the model, so you can price a race day from a live forecast.
+    </p>
+    <p class="flag">
+      Superseded, 28 October 2026: the June headline of 1.03 minutes per °F and
+      "+31 minutes from 50°F to 80°F". The rate for the median runner is now 0.95
+      minutes per °F above 55°F, with no cost below it, so 50°F to 80°F is about
+      25 minutes. The section after the forecast tool explains why the number moved.
+    </p>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">5 km: the data</p>
+    <h2>Eighty races, three ways to measure a field</h2>
+    <p>
+      Results come from
+      <a href="https://github.com/adrian3/Boston-Marathon-Data-Project">adrian3/Boston-Marathon-Data-Project</a>,
+      one file per year from 1897 to 2019. The early files are short: before 1975
+      they list only the leading finishers (25 to 285 a year), and from 1975 to 1995 each list stops
+      at a time limit (3:30 in 1976, 4:00 for most of the 1980s, about 5:00 in the
+      early 1990s). A percentile of a list cut at a time limit moves with the cut,
+      and on a hot day more runners fall past it. So the study uses three kinds of
+      series, each only where the list supports it:
+    </p>
+    <ul>
+      <li>Front of the race: the times of the 10th and 25th man, 1940 to 2019. Every year lists at least 25 men.</li>
+      <li>Sub-elite: the 100th and 1000th man, 1975 to 2019.</li>
+      <li>The whole field: the 10th, 25th, 50th, 75th and 90th percentile of all
+        finishers, in years whose list runs well past five hours (at least 2% of it
+        slower than 5:00). That is 1996 and 1998 to 2019. 1996 is left out as the
+        centennial race, a one-off field of about 36,000, and 2013 because the race
+        was stopped after the bombing.</li>
+    </ul>
+    <p>
+      The repo's original source, <a href="https://github.com/llimllib/bostonmarathon">llimllib/bostonmarathon</a>,
+      covers 2001 to 2014. The two agree on finisher counts within 0.6% in every
+      year but 2013. Their medians match to 0.05 minutes in 2006 to 2011 and 2014.
+      In 2001 to 2005 and 2012 adrian3's median is 4.8 to 10.2 minutes faster,
+      because llimllib's <code>official</code> column in those years is gun time;
+      adrian3 matches llimllib's <code>net</code> column there to within 0.2 minutes.
+      This version uses adrian3 for every year. Wheelchair and handcycle entrants are
+      excluded (a W bib in llimllib; a two-hour floor catches any left in adrian3's
+      1993 and 1995 files).
+    </p>
+    <p>
+      Weather is the <a href="https://open-meteo.com/en/docs/historical-weather-api">Open-Meteo historical archive</a>
+      (ERA5 reanalysis, available from 1940), hourly, at the Hopkinton start,
+      Wellesley near halfway and the Boylston Street finish. The hours come from a
+      race table in <code>tables/race_days.csv</code>: April 19 through 1968 (the 20th
+      when the 19th was a Sunday), the third Monday of April since 1969, a noon start
+      through 2006 and 10:00 from 2007 with waves to 11:15. The front series use the
+      first two hours after the start; the others use the start to about four hours
+      after the last wave.
     </p>
   </section>
 
   <section class="stop stop--key">
-    <p class="eyebrow">10 km: the scale</p>
-    <h2>The slow years are the hot years</h2>
+    <p class="eyebrow">10 km: eighty years in one chart</p>
+    <h2>The slow years are the hot years, in every era</h2>
     <p>
-      Twelve of the fourteen races fell between 45°F and 64°F, and leaving out
-      the halted 2013 race, their medians sit between 3:44 and 4:03. The only two
-      races above 70°F, 2004 and 2012, produced the two slowest fields. The years
-      either side of each were back near 3:45 to 3:50.
+      Each point is one race: how far that race's time sat above or below the
+      field's long-run trend, against the temperature on the course. The dashed line
+      is the fitted model, flat to 55°F and rising after. 1976, at 87°F, is the
+      hottest race in the data; 2012 (81°F) and 2004 (77°F) come next.
     </p>
-    <figure class="thermo-fig">
-      <div class="thermo-box">
-<svg class="thermo" viewBox="0 0 400 640" role="img" aria-labelledby="thermo-t thermo-d" xmlns="http://www.w3.org/2000/svg">
-<title id="thermo-t">Race-day temperature of each Boston Marathon, 2001 to 2014</title>
-<desc id="thermo-d">A thermometer scale from 44 to 84 degrees Fahrenheit. Each year sits at its race-day temperature with its median finish time. 2012 (81.3 F, 4:16) and 2004 (73.6 F, 4:20) are at the top, well clear of the rest; the other twelve years fall between 45 and 64 F, with medians from 3:44 to 4:03 apart from the halted 2013 race at 3:29.</desc>
-<rect class="tube" x="52" y="26" width="22" height="588"/>
-<line class="tick" x1="40" x2="52" y1="586.0" y2="586.0"/><text class="tl" x="34" y="590.0" text-anchor="end">45°</text>
-<line class="tick" x1="40" x2="52" y1="516.0" y2="516.0"/><text class="tl" x="34" y="520.0" text-anchor="end">50°</text>
-<line class="tick" x1="40" x2="52" y1="446.0" y2="446.0"/><text class="tl" x="34" y="450.0" text-anchor="end">55°</text>
-<line class="tick" x1="40" x2="52" y1="376.0" y2="376.0"/><text class="tl" x="34" y="380.0" text-anchor="end">60°</text>
-<line class="tick" x1="40" x2="52" y1="306.0" y2="306.0"/><text class="tl" x="34" y="310.0" text-anchor="end">65°</text>
-<line class="tick" x1="40" x2="52" y1="236.0" y2="236.0"/><text class="tl" x="34" y="240.0" text-anchor="end">70°</text>
-<line class="tick" x1="40" x2="52" y1="166.0" y2="166.0"/><text class="tl" x="34" y="170.0" text-anchor="end">75°</text>
-<line class="tick" x1="40" x2="52" y1="96.0" y2="96.0"/><text class="tl" x="34" y="100.0" text-anchor="end">80°</text>
-<path class="lead" d="M74 77.8 H112 L140 77.8 H150"/>
-<rect class="pt hot" x="58" y="72.8" width="10" height="10"/>
-<text class="yr hotlab" x="156" y="83.8">2012</text><text class="tv" x="212" y="83.8">81.3°F</text><text class="mv hotlab" x="318" y="83.8">4:16</text>
-<path class="lead" d="M74 185.6 H112 L140 162.0 H150"/>
-<rect class="pt hot" x="58" y="180.6" width="10" height="10"/>
-<text class="yr hotlab" x="156" y="168.0">2004</text><text class="tv" x="212" y="168.0">73.6°F</text><text class="mv hotlab" x="318" y="168.0">4:20</text>
-<path class="lead" d="M74 317.2 H112 L140 199.0 H150"/>
-<rect class="pt" x="58" y="312.2" width="10" height="10"/>
-<text class="yr" x="156" y="205.0">2005</text><text class="tv" x="212" y="205.0">64.2°F</text><text class="mv" x="318" y="205.0">4:03</text>
-<path class="lead" d="M74 321.4 H112 L140 236.0 H150"/>
-<rect class="pt" x="58" y="316.4" width="10" height="10"/>
-<text class="yr" x="156" y="242.0">2002</text><text class="tv" x="212" y="242.0">63.9°F</text><text class="mv" x="318" y="242.0">3:46</text>
-<path class="lead" d="M74 376.0 H112 L140 273.0 H150"/>
-<rect class="pt" x="58" y="371.0" width="10" height="10"/>
-<text class="yr" x="156" y="279.0">2014</text><text class="tv" x="212" y="279.0">60.0°F</text><text class="mv" x="318" y="279.0">3:52</text>
-<path class="lead" d="M74 391.4 H112 L140 310.0 H150"/>
-<rect class="pt" x="58" y="386.4" width="10" height="10"/>
-<text class="yr" x="156" y="316.0">2003</text><text class="tv" x="212" y="316.0">58.9°F</text><text class="mv" x="318" y="316.0">3:59</text>
-<path class="lead" d="M74 408.2 H112 L140 347.0 H150"/>
-<rect class="pt" x="58" y="403.2" width="10" height="10"/>
-<text class="yr" x="156" y="353.0">2008</text><text class="tv" x="212" y="353.0">57.7°F</text><text class="mv" x="318" y="353.0">3:46</text>
-<path class="lead" d="M74 460.0 H112 L140 384.0 H150"/>
-<rect class="pt" x="58" y="455.0" width="10" height="10"/>
-<text class="yr" x="156" y="390.0">2011</text><text class="tv" x="212" y="390.0">54.0°F</text><text class="mv" x="318" y="390.0">3:45</text>
-<path class="lead" d="M74 478.2 H112 L140 421.0 H150"/>
-<rect class="pt open" x="58" y="473.2" width="10" height="10"/>
-<text class="yr" x="156" y="427.0">2013*</text><text class="tv" x="212" y="427.0">52.7°F</text><text class="mv" x="318" y="427.0">3:29</text>
-<path class="lead" d="M74 483.8 H112 L140 458.0 H150"/>
-<rect class="pt" x="58" y="478.8" width="10" height="10"/>
-<text class="yr" x="156" y="464.0">2010</text><text class="tv" x="212" y="464.0">52.3°F</text><text class="mv" x="318" y="464.0">3:44</text>
-<path class="lead" d="M74 496.4 H112 L140 495.0 H150"/>
-<rect class="pt" x="58" y="491.4" width="10" height="10"/>
-<text class="yr" x="156" y="501.0">2006</text><text class="tv" x="212" y="501.0">51.4°F</text><text class="mv" x="318" y="501.0">3:45</text>
-<path class="lead" d="M74 497.8 H112 L140 532.0 H150"/>
-<rect class="pt" x="58" y="492.8" width="10" height="10"/>
-<text class="yr" x="156" y="538.0">2001</text><text class="tv" x="212" y="538.0">51.3°F</text><text class="mv" x="318" y="538.0">3:47</text>
-<path class="lead" d="M74 534.2 H112 L140 569.0 H150"/>
-<rect class="pt" x="58" y="529.2" width="10" height="10"/>
-<text class="yr" x="156" y="575.0">2009</text><text class="tv" x="212" y="575.0">48.7°F</text><text class="mv" x="318" y="575.0">3:44</text>
-<path class="lead" d="M74 586.0 H112 L140 606.0 H150"/>
-<rect class="pt" x="58" y="581.0" width="10" height="10"/>
-<text class="yr" x="156" y="612.0">2007</text><text class="tv" x="212" y="612.0">45.0°F</text><text class="mv" x="318" y="612.0">3:49</text>
-<text class="hd" x="156" y="18">YEAR</text><text class="hd" x="212" y="18">RACE DAY</text><text class="hd" x="318" y="18">MEDIAN</text>
-</svg>
+    <figure id="era-fig">
+      <p class="fig-title" id="era-title" aria-live="polite">Men's 25th place</p>
+      <div class="ctl">
+        <div class="seg" id="era-seg" role="group" aria-label="Which part of the field">
+          <button type="button" data-k="men_25th" aria-pressed="true">Men's 25th, 1940 on</button>
+          <button type="button" data-k="men_1000th" aria-pressed="false">Men's 1000th, 1975 on</button>
+          <button type="button" data-k="p50" aria-pressed="false">Median, 1998 on</button>
+        </div>
       </div>
-      <figcaption>Race-day temperature is the mean of hourly readings from 10:00 to
-        16:00 near the course midpoint (Open-Meteo archive). Median finish is over
-        runners between 2 and 8 hours. Rust squares are the two races above 70°F.
-        *2013 was halted, so its median (3:29) is not comparable.</figcaption>
+      <div class="chart" id="era-chart" data-series="men_25th"></div>
+      <ul class="legend" aria-label="Legend">
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle class="e0" cx="8" cy="8" r="5.5"/></svg>1940 to 1969, no qualifying time</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><rect class="e1" x="2.5" y="2.5" width="11" height="11"/></svg>1970 to 1985, qualifying times, no prize money</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle class="e2" cx="8" cy="8" r="6"/></svg>1986 to 2019, prize money</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle class="ho" cx="8" cy="8" r="5.5"/></svg>holdout year, 2015 to 2019</li>
+      </ul>
+      <p class="readout" id="era-read" aria-live="polite">Hover or tab to a point for its year.</p>
+      <noscript><div class="plate"><img width="1376" height="832" src="../figures/03_eighty_years.png" alt="Scatter of race-day temperature against men's 25th-place time relative to trend for 80 Boston Marathons, colored by era. Points are spread around zero below 55 degrees and rise above it; 1976 at 87 degrees is highest." /></div></noscript>
+      <figcaption>Time against trend is the log difference between that year's time and
+        the fitted long-run trend, in percent. Eras follow two documented changes:
+        qualifying times from 1970 (B.A.A. qualifying history) and prize money from
+        1986, when John Hancock became the sponsor. Values from
+        <code>tables/series_*.csv</code>.</figcaption>
     </figure>
   </section>
 
   <section class="stop">
-    <p class="eyebrow">21 km: the fit</p>
-    <h2>A straight line through thirteen races</h2>
+    <p class="eyebrow">15 km: the confounder</p>
+    <h2>The field changed more than the weather did</h2>
     <p>
-      An ordinary least squares fit of median finish on temperature gives 1.03
-      minutes per °F (standard error 0.19, p = 0.0002). Over the 30 degrees from
-      50°F to 80°F that is 31 minutes. Switch the chart to the faster or slower
-      quarter of the field, or put 2013 back into the fit, and the line is
-      refitted in your browser from the same fourteen rows.
+      Over eighty years the 25th man got 35 minutes faster (2:53:32 in 1940, 2:18:01 in
+      2019) and the field went from 55 listed finishers to more than 26,000, about
+      45% of them women. Any slope against temperature has to get past that. I
+      fitted each series five ways: with no trend, a straight-line trend, era
+      steps plus a line, a line plus field size and the share of women, and a
+      smooth spline in the year (a restricted cubic spline with three to five
+      knots). The spline is the main model.
     </p>
-    <figure id="fit-fig">
-      <p class="fig-title" id="fit-title" aria-live="polite">Median runner: +1.03 min per °F</p>
-      <div class="ctl">
-        <div class="seg" role="group" aria-label="Which runner in the field">
-          <button type="button" data-k="3" aria-pressed="false">25th percentile</button>
-          <button type="button" data-k="2" aria-pressed="true">Median</button>
-          <button type="button" data-k="4" aria-pressed="false">75th percentile</button>
-        </div>
-        <label><input type="checkbox" id="inc13" /> Include 2013 in the fit</label>
-      </div>
-      <div class="chart" id="fit-chart"></div>
-      <p class="readout" id="fit-read" aria-live="polite">Hover or tab to a point for its year.</p>
-      <noscript>
-        <div class="plate"><img width="1720" height="1080" src="../figures/01_temp_vs_time.png" alt="Scatter of race-day temperature against field median finish time for fourteen Boston Marathons. The dashed fit rises about one minute per degree; 2012 and 2004 sit at the top right, and 2013 is drawn hollow below the line." /></div>
-      </noscript>
-      <figcaption>Each point is one year. Rust points are the two races above 70°F;
-        the hollow point is 2013, which is left out of the fit unless you tick the box.
-        Values from <code>tables/heat_tax.csv</code>.</figcaption>
-    </figure>
+    <div class="tablewrap">
+      <table class="num-t">
+        <thead><tr><th>Series</th><th class="num">No trend</th><th class="num">Line</th><th class="num">Eras</th><th class="num">Field mix</th><th class="num">Spline</th></tr></thead>
+        <tbody id="rob-body"></tbody>
+      </table>
+    </div>
+    <p style="margin-top:14px">
+      Heat slope in % of finish time per °F above 55°F, from
+      <code>tables/trend_robustness.csv</code>. At the front, ignoring the trend
+      halves the slope (0.24 against 0.41 for the 25th man), because hot races were
+      not spread evenly across the decades. For the whole-field percentiles the
+      choice barely matters: the median sits between 0.42 and 0.45 under every
+      choice. Eras do not apply there, since 1998 to 2014 has only one standards
+      change (2013) and one race after it.
+    </p>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">21 km: temperature, dew point or heat index</p>
+    <h2>Dry-bulb temperature wins</h2>
+    <p>
+      Humid heat is supposed to be worse, so I expected dew point or a heat index to
+      beat the thermometer. Each candidate was scored by leave-one-year-out
+      cross-validation inside the training years, across all nine series, as the
+      share of the trend-only model's error it removed.
+    </p>
+    <div class="tablewrap">
+      <table class="num-t">
+        <thead><tr><th>Weather term</th><th>Shape</th><th class="num">Error removed</th></tr></thead>
+        <tbody id="cv-body"></tbody>
+      </table>
+    </div>
+    <p style="margin-top:14px">
+      Temperature with a bend at 55°F removed 37% of the error; a straight line in
+      temperature removed 32%; the NWS heat index did about as well as temperature
+      but not better. Dew point alone removed nothing. Added on top of temperature,
+      every extra term (wind, dew point, humidity, rain, sun, cloud) made the
+      cross-validated predictions worse. Boston's race days are mostly dry: the
+      median race-day dew point is 37°F, and among the 16 whole-field training
+      races only 2002, 2004 and 2012 went above 50°F. With so few humid races the data cannot separate humidity from heat.
+    </p>
   </section>
 
   <section class="stop stop--key">
-    <p class="eyebrow">30 km: who pays</p>
-    <h2>Heat costs slower runners more</h2>
+    <p class="eyebrow">25 km: who pays</p>
+    <h2>The same share, so more minutes at the back</h2>
     <p>
-      The quartile columns in the same table answer a second question. The runner
-      a quarter of the way down the field loses 0.76 minutes per °F; the runner
-      three quarters of the way down loses 1.35. As a share of finish time that is
-      0.36% per °F against 0.51%: slower runners lose a larger fraction of
-      their race as well as more minutes.
+      Fitted separately for nine positions in the field, the heat slope in percent
+      sits between 0.29% and 0.46% per °F. Converted to minutes it climbs from 0.43
+      per °F for the 10th man (2:13) to 0.95 at the median (3:47) and 1.34 at the
+      90th percentile (5:01). Switch the chart to minutes to see it.
     </p>
-    <dl class="q3" aria-label="Fitted minutes lost per degree Fahrenheit, by position in the field">
-      <div><dt>25th percentile<small>about 3:30</small></dt><dd class="b"><span class="bar" style="width:56%"></span></dd><dd class="v">0.76</dd></div>
-      <div><dt>Median<small>about 3:54</small></dt><dd class="b"><span class="bar" style="width:76%"></span></dd><dd class="v">1.03</dd></div>
-      <div><dt>75th percentile<small>about 4:23</small></dt><dd class="b"><span class="bar hi" style="width:100%"></span></dd><dd class="v">1.35</dd></div>
-    </dl>
-    <p style="margin-top:14px">
-      These slopes come from the same OLS fit run on the <code>p25</code> and
-      <code>p75</code> columns of <code>tables/heat_tax.csv</code>, 13 races, 2013
-      excluded; <code>analyze.py</code> itself reports only the median. The
-      typical times are the 13-race averages of each column.
-    </p>
-  </section>
-
-  <section class="stop" id="estimate">
-    <p class="eyebrow">35 km: your race</p>
-    <h2>Price your own race day</h2>
-    <p>
-      Enter a marathon time and the temperature you ran it in, then the forecast
-      for the next one. The estimate uses the rate for your part of the field:
-      0.36% of finish time per °F at 3:30, rising to 0.51% at 4:23, interpolated
-      in between and held at the end values outside that band.
-    </p>
-    <div class="bib">
-      <div class="bib-head"><span>Heat-adjusted finish</span><span>Boston 2001 to 2014 fit</span></div>
-      <div class="bib-body">
-        <div>
-          <div class="field">
-            <label for="est-time">Your marathon time <span class="unit">h:mm or h:mm:ss</span></label>
-            <input type="text" id="est-time" value="3:45" inputmode="numeric" autocomplete="off" spellcheck="false" />
-            <div class="hint" id="est-time-hint">Between 2:00 and 8:00.</div>
-          </div>
-          <div class="field">
-            <label for="est-t0">Temperature on that day <output id="est-t0-o" for="est-t0">50°F</output></label>
-            <input type="range" id="est-t0" min="35" max="90" step="1" value="50" />
-          </div>
-          <div class="field">
-            <label for="est-t1">Race-day forecast <output id="est-t1-o" for="est-t1">70°F</output></label>
-            <input type="range" id="est-t1" min="35" max="90" step="1" value="70" />
-          </div>
-        </div>
-        <div class="res" aria-live="polite">
-          <p class="lbl">Estimated finish</p>
-          <div class="big" id="est-out">&nbsp;</div>
-          <p class="delta" id="est-delta">&nbsp;</p>
-          <p id="est-pace"></p>
-          <p id="est-note"></p>
+    <figure id="slope-fig">
+      <div class="ctl">
+        <div class="seg" id="slope-seg" role="group" aria-label="Units">
+          <button type="button" data-k="pct" aria-pressed="true">% of time per °F</button>
+          <button type="button" data-k="min" aria-pressed="false">Minutes per °F</button>
         </div>
       </div>
-    </div>
-    <p style="margin-top:16px">
-      Read the answer as what the field does on average, at Boston, on days that
-      were warm for all the usual reasons. It cannot know how well you handle heat
-      or how humid your race will be.
+      <div class="chart" id="slope-chart"></div>
+      <ul class="legend" aria-label="Legend">
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><rect class="e1" x="2.5" y="2.5" width="11" height="11"/></svg>men's place (10th, 25th, 100th, 1000th)</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle class="e2" cx="8" cy="8" r="6"/></svg>percentile of all finishers</li>
+        <li>vertical line: 90% bootstrap interval over race years</li>
+      </ul>
+      <p class="readout" id="slope-read" aria-live="polite">Hover or tab to a point for its numbers.</p>
+      <noscript><div class="plate"><img width="1376" height="736" src="../figures/04_slopes.png" alt="Heat slope per degree above 55 F for nine positions in the Boston field, all between 0.29 and 0.46 percent, with bootstrap intervals." /></div></noscript>
+      <figcaption>Typical time is the 2014 trend value on a cool, still day. The front
+        series have 75 training races and narrow intervals; the field percentiles have
+        16 and wide ones, because only two training races (2004 and 2012) were above
+        70°F. Values from <code>tables/slopes_by_series.csv</code>.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">30 km: the wind</p>
+    <h2>A tailwind helps the front; the field shows nothing clear</h2>
+    <p>
+      The course heads east-northeast (a bearing of about 70°), so a west or
+      southwest wind pushes runners to Boston. The chart shows the wind component
+      along the course on every race day. 1994 and 2011 had tailwinds near 12 mph;
+      2018 had a 15 mph headwind with cold rain.
+    </p>
+    <figure>
+      <div class="chart" id="wind-chart"></div>
+      <ul class="legend" aria-label="Legend">
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><rect class="tail" x="3" y="2" width="10" height="12"/></svg>tailwind</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><rect class="head" x="3" y="2" width="10" height="12"/></svg>headwind</li>
+      </ul>
+      <p class="readout" id="wind-read" aria-live="polite">Hover or tab to a bar for its year.</p>
+      <noscript><div class="plate"><img width="1376" height="672" src="../figures/05_wind.png" alt="Bar chart of along-course wind on each race day from 1940 to 2019; 2018 has the largest headwind and 1994 and 2011 large tailwinds." /></div></noscript>
+      <figcaption>Hourly 10 m wind from ERA5, averaged as a vector over the race hours
+        and the three course points, then projected on the course bearing.</figcaption>
+    </figure>
+    <p>
+      For the 10th and 25th man, each mph of tailwind took 0.08% and 0.11% off the
+      time (90% intervals 0.02 to 0.16 and 0.02 to 0.21). A 10 mph headwind costs a
+      2:20 runner about 1.3 minutes. For the whole-field percentiles the
+      estimate came out with the wrong sign and an interval wide enough to include
+      either answer, so the forecast tool applies the front-of-race rate, 0.095% per
+      mph of headwind, to everyone and says so. Wind did not improve the
+      cross-validated fit, so the main model leaves it out.
     </p>
   </section>
 
   <section class="stop stop--warn">
-    <p class="eyebrow">40 km: limitations</p>
+    <p class="eyebrow">35 km: the holdout</p>
+    <h2>Five races the model never saw</h2>
+    <p>
+      2015 to 2019 were left out of every fit and every choice above. The level of
+      the field kept drifting after 2014, so the fairest test is the weather part
+      alone: does the model rank those five races in the right order and by the
+      right amounts? The chart compares each race's predicted and actual time
+      against the five-year average.
+    </p>
+    <figure>
+      <div class="ctl">
+        <label for="hold-series">Series</label>
+        <select id="hold-series"></select>
+      </div>
+      <div class="chart" id="hold-chart"></div>
+      <ul class="legend" aria-label="Legend">
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><rect class="band" x="2" y="2" width="12" height="12"/><line class="pred" x1="2" x2="14" y1="8" y2="8"/></svg>prediction and 80% band</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle class="e2" cx="8" cy="8" r="6"/></svg>actual, inside the band</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>actual, outside the band</li>
+      </ul>
+      <p class="readout" id="hold-read" aria-live="polite">Hover or tab to a year.</p>
+      <noscript><div class="plate"><img width="1376" height="672" src="../figures/06_holdout.png" alt="Predicted and actual median times for 2015 to 2019 against their average; 2018 is well outside its band." /></div></noscript>
+      <figcaption>The band is the model's residual spread plus slope uncertainty.
+        Values from <code>tables/holdout_2015_2019.csv</code>.</figcaption>
+    </figure>
+    <p>
+      Across the nine series and five years, the weather model's average error was
+      2.26% of finish time. Predicting every holdout race at the five-year average,
+      with no weather at all, gave 2.15%. The model did well on cold, wet 2015 (0.90%
+      against 2.76%) and warm 2016 (1.20% against 1.59%). It over-predicted 2017, a
+      69°F day with an 11 mph tailwind. It missed 2018 badly: 44°F, cold rain and a
+      15 mph headwind, a race the model scores as ideal, and the 10th man ran 7% slower
+      than the five-year average. 33 of the 45 actual values fell inside the 80%
+      bands (73%); in 2018 only one of nine did.
+    </p>
+    <p>
+      Holding the 2014 trend flat and predicting absolute times, the median finish
+      was off by 6.3 minutes on average over the five races. The old June line, applied the same way, was
+      off by 8.8. Both miss partly because the slower half of the field got faster
+      after 2014: the 90th percentile in 2015 to 2017 was 6% to 7% below the 2014
+      trend, a year when the field was unusually large (31,809 finishers).
+    </p>
+    <p>
+      So the model prices heat. It has no term for cold rain, and on the races it
+      never saw it did not beat a flat guess overall. Read the forecast below as the
+      heat cost on a dry day, with the interval it shows.
+    </p>
+  </section>
+
+  <section class="stop" id="forecast">
+    <p class="eyebrow">40 km: your race</p>
+    <h2>Price your own race day</h2>
+    <p>
+      Enter the time you would run on a cool, still day. The tool asks Open-Meteo
+      for the hourly forecast on race day, averages the race hours, and applies the
+      model for your position in the field. More than 16 days out it falls back to
+      climatology and says so. The next Boston Marathon is the default.
+    </p>
+    <form class="bib" id="fc-form" novalidate>
+      <div class="bib-head"><span>Heat-adjusted finish</span><span>Model heat-2026.10.1</span></div>
+      <div class="bib-body">
+        <div>
+          <div class="field">
+            <label for="fc-time">Cool-day finish time <span class="unit">h:mm or h:mm:ss</span></label>
+            <input type="text" id="fc-time" value="3:45" inputmode="numeric" autocomplete="off" spellcheck="false" />
+          </div>
+          <div class="field">
+            <label for="fc-where">Where</label>
+            <select id="fc-where">
+              <option value="boston" selected>Boston Marathon course</option>
+              <option value="other">Somewhere else</option>
+            </select>
+            <div id="fc-other" hidden>
+              <label for="fc-q" class="lab-t" style="margin-top:10px">Town or city</label>
+              <div class="row"><input type="search" id="fc-q" autocomplete="off" /><button type="button" class="btn-sm" id="fc-search">Find</button></div>
+              <ul class="places" id="fc-results" hidden aria-live="polite"></ul>
+            </div>
+            <div class="hint" id="fc-place-note"></div>
+          </div>
+          <div class="field" id="fc-dir-row" hidden>
+            <label for="fc-dir">Course heads toward</label>
+            <select id="fc-dir">
+              <option value="" selected>Not set (ignore wind)</option>
+              <option value="0">North</option><option value="45">Northeast</option>
+              <option value="90">East</option><option value="135">Southeast</option>
+              <option value="180">South</option><option value="225">Southwest</option>
+              <option value="270">West</option><option value="315">Northwest</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fc-date">Race date</label>
+            <input type="date" id="fc-date" />
+          </div>
+          <div class="field">
+            <label for="fc-start">Your start time <span class="unit">local</span></label>
+            <input type="time" id="fc-start" value="10:00" step="3600" />
+            <div class="hint">The tool averages six hours from here.</div>
+          </div>
+          <button type="submit" class="btn-go">Get the weather</button>
+        </div>
+        <div class="res" id="fc-out" aria-live="polite">
+          <p class="lbl">Expected slowdown</p>
+          <p>Press the button. For a date more than 16 days out on the Boston course
+            the answer comes from this repo's data and no request is made.</p>
+        </div>
+      </div>
+    </form>
+    <div class="sends">
+      <strong>What this tool sends, and to whom.</strong> When you press the button,
+      your browser contacts Open-Meteo directly and nothing else:
+      <ul>
+        <li><code>api.open-meteo.com</code> for a forecast (dates from 60 days ago to 16 days ahead),</li>
+        <li><code>archive-api.open-meteo.com</code> for older dates, and for climatology away from Boston,</li>
+        <li><code>geocoding-api.open-meteo.com</code> for the town you type, only if you search.</li>
+      </ul>
+      Each request carries the coordinates, the date and, for a search, the text you
+      typed. This site has no server, sets no cookies, runs no analytics and keeps
+      nothing. Open-Meteo's own handling is in its
+      <a href="https://open-meteo.com/en/terms">terms and privacy policy</a>.
+    </div>
+  </section>
+
+  <section class="stop">
+    <p class="eyebrow">40.5 km: the June number</p>
+    <h2>Why 1.03 became 0.95, with no cost below 55°F</h2>
+    <p>
+      Three things moved the June result, and <code>tables/old_vs_new.csv</code>
+      keeps each step. First, the timing. llimllib's <code>official</code> column is
+      gun time in 2001 to 2005 and 2012, and gun time adds the minutes spent
+      reaching the start line, which grows with the field. That gap was 10.2
+      minutes at the median in hot 2004 and 4.8 minutes in hot 2012, so it made the
+      hot years look slower than they were. Re-running the June fit on the same 13
+      races with chip times and the course-wide weather window gives 0.76 minutes
+      per °F, not 1.03.
+    </p>
+    <p>
+      Second, the shape. A straight line spreads the heat cost over every degree,
+      including the cool ones, where the 80 races show no effect. With the bend at
+      55°F, the slope above it is steeper than the straight line's, and the slope
+      below it is zero. Third, the field: the new median series starts in 1998
+      instead of 2001 and has a trend in the year, so a slow year early on is not
+      read as a hot one.
+    </p>
+    <p>
+      The net result for the median runner is 0.95 minutes per °F above 55°F. A
+      50°F race and an 80°F race are now about 25 minutes apart rather than 31,
+      and a 50°F race and a 55°F race are the same.
+    </p>
+  </section>
+
+  <section class="stop stop--warn">
+    <p class="eyebrow">41 km: limitations</p>
     <h2>What this doesn't show</h2>
     <p>
-      Thirteen points can describe a relationship but cannot prove a cause. Field
-      size grew from 13,422 finishers in 2001 to 31,939 in 2014, and qualifying
-      standards changed during the period. Either could move the median on its own.
+      The data describes Boston fields in April. A runner who trained through a hot
+      summer, or a race in a humid place, may not follow it. The weather is a
+      reanalysis on a 0.25-degree grid (about 20 by 28 km here), not a thermometer on the road, and one
+      average over six hours hides a cool start and a warm finish.
     </p>
     <p>
-      2013 is out of the fit because the race was stopped after the bombing and
-      many runners never finished, which truncates the field. Its median of 3:29
-      would pull the line for reasons unrelated to weather.
+      The field percentiles rest on 16 races, only two of them above 70°F, so their
+      intervals are wide and the 55°F bend was chosen across all nine series rather
+      than for each. The bootstrap does not redo that choice, so the intervals are a
+      little too narrow. Times before 2001 are as adrian3 publishes them; for the
+      2001 to 2005 and 2012 races they are chip times, and earlier ones are probably
+      gun times.
     </p>
     <p>
-      Temperature also stands in for humidity, sun and wind, none of which were
-      modeled. The slope is the cost of a warm Boston race day with all of those
-      folded in, measured on the field and not on any one runner.
+      Field size, qualifying standards, charity places and who chose not to start on
+      a hot morning all move the numbers, and the trend only soaks up the slow part
+      of that. In 2012 the B.A.A. let entrants defer to 2013 because of the heat
+      forecast, so the 2012 field was not the field that entered.
     </p>
   </section>
 
@@ -561,22 +695,23 @@
     <p class="eyebrow">Finish: how it was built</p>
     <h2>Where the numbers come from</h2>
     <p>
-      <code>fetch_data.py</code> downloads the results and the weather.
-      <code>analyze.py</code> computes each year's median and quartiles, fits the
-      line with <code>scipy.stats.linregress</code> and writes the figures and
-      <code>tables/heat_tax.csv</code>. Raw downloads are git-ignored. The same
-      rule feeds the heat adjustment in
-      <a href="https://lyhjeremy.github.io/race-day-copilot/">Race Day Copilot</a>
-      and a knowledge card in
-      <a href="https://lyhjeremy.github.io/marathon-strategy-rag/">Marathon Strategy RAG</a>.
+      <code>fetch_data.py</code> downloads the results (adrian3 pinned to commit
+      <code>cc4fdd8</code>, plus llimllib for the cross-check) and the weather into a
+      cache outside the repo. <code>build_dataset.py</code> writes the per-year
+      tables, <code>model_fit.py</code> picks the weather terms, fits every series,
+      runs the bootstrap and the holdout and writes <code>model/heat_model.json</code>.
+      <code>heat_model.py</code> loads that file and is what
+      <a href="https://lyhjeremy.github.io/marathon-strategy-rag/">Marathon Strategy RAG</a>
+      calls; the forecast tool on this page runs the same arithmetic in JavaScript.
+      <code>legacy_2001_2014.py</code> rebuilds the June result.
     </p>
     <dl class="specs">
-      <div class="spec"><dt>Results</dt><dd>Boston Marathon official finish times 2001 to 2014, from the public <a href="https://github.com/llimllib/bostonmarathon">llimllib/bostonmarathon</a> mirror</dd></div>
-      <div class="spec"><dt>Weather</dt><dd><a href="https://open-meteo.com/">Open-Meteo</a> historical archive, hourly 2 m temperature, mean of 10:00 to 16:00 local at 42.30 N, 71.35 W</dd></div>
-      <div class="spec"><dt>Filter</dt><dd>Finish times between 120 and 480 minutes</dd></div>
-      <div class="spec"><dt>Model</dt><dd>Pearson correlation and OLS of median finish on temperature, 13 races</dd></div>
-      <div class="spec"><dt>Excluded</dt><dd>2013, halted mid-race</dd></div>
-      <div class="spec"><dt>Stack</dt><dd>Python, pandas, SciPy, matplotlib; the charts on this page are plain SVG drawn from the CSV</dd></div>
+      <div class="spec"><dt>Results</dt><dd>Boston Marathon finish times 1940 to 2019 from <a href="https://github.com/adrian3/Boston-Marathon-Data-Project">adrian3/Boston-Marathon-Data-Project</a>; 2001 to 2014 checked against <a href="https://github.com/llimllib/bostonmarathon">llimllib/bostonmarathon</a></dd></div>
+      <div class="spec"><dt>Weather</dt><dd><a href="https://open-meteo.com/">Open-Meteo</a> historical archive (ERA5), hourly, three course points, race hours from <code>tables/race_days.csv</code></dd></div>
+      <div class="spec"><dt>Model</dt><dd>log time = spline trend in year + slope × max(temperature − 55°F, 0), one fit per series, OLS</dd></div>
+      <div class="spec"><dt>Uncertainty</dt><dd>1,000 bootstrap resamples of race years; 90% intervals</dd></div>
+      <div class="spec"><dt>Holdout</dt><dd>2015 to 2019, never used for fitting or choices</dd></div>
+      <div class="spec"><dt>Stack</dt><dd>Python, pandas, NumPy; the charts and the forecast tool are plain SVG and JavaScript</dd></div>
     </dl>
   </section>
 
@@ -599,98 +734,11 @@
       <a href="https://github.com/lyhjeremy/marathon-heat-tax">Source</a> ·
       MIT © 2026 Jeremy Lee
     </p>
-    <p>Results data © the Boston Athletic Association, via a public mirror. Weather by Open-Meteo.</p>
+    <p>Results data © the Boston Athletic Association, via public compilations. Weather by Open-Meteo (ERA5, Copernicus).</p>
   </footer>
 </div>
 
-<script>
-(function () {
-  // year, temp_F, median_min, p25, p75, n  (tables/heat_tax.csv)
-  var D = [[2001,51.3,227.48,204.21,255.18,13422],[2002,63.9,226.0,201.85,253.43,14590],[2003,58.9,238.63,213.98,268.83,17042],[2004,73.6,259.6,231.27,292.52,16745],[2005,64.2,243.33,216.68,275.9,17541],[2006,51.4,224.75,205.47,249.7,19696],[2007,45.0,228.62,208.29,254.48,20355],[2008,57.7,226.18,205.53,251.58,21963],[2009,48.7,224.02,204.52,248.35,22882],[2010,52.3,224.3,204.82,248.7,22687],[2011,54.0,224.92,204.03,249.72,23922],[2012,81.3,255.8,228.75,290.7,21548],[2013,52.7,209.32,191.85,225.28,16127],[2014,60.0,232.42,205.66,273.3,31939]];
-  var NAME = {2: "Median runner", 3: "25th percentile", 4: "75th percentile"};
-  var NS = "http://www.w3.org/2000/svg";
-  function hm(m) { var h = Math.floor(m / 60), r = Math.round(m - h * 60); if (r === 60) { h++; r = 0; } return h + ":" + (r < 10 ? "0" : "") + r; }
-  function hms(m) { var s = Math.round(m * 60), h = Math.floor(s / 3600), mm = Math.floor(s % 3600 / 60), ss = s % 60; return h + ":" + (mm < 10 ? "0" : "") + mm + ":" + (ss < 10 ? "0" : "") + ss; }
-  function ols(rows, k) {
-    var n = rows.length, sx = 0, sy = 0, sxx = 0, sxy = 0, syy = 0;
-    rows.forEach(function (r) { var x = r[1], y = r[k]; sx += x; sy += y; sxx += x * x; sxy += x * y; syy += y * y; });
-    var b = (n * sxy - sx * sy) / (n * sxx - sx * sx), a = (sy - b * sx) / n;
-    var rr = (n * sxy - sx * sy) / Math.sqrt((n * sxx - sx * sx) * (n * syy - sy * sy));
-    return { b: b, a: a, r: rr, mean: sy / n };
-  }
-  function el(tag, at, parent, txt) { var e = document.createElementNS(NS, tag); for (var k in at) e.setAttribute(k, at[k]); if (txt != null) e.textContent = txt; if (parent) parent.appendChild(e); return e; }
-
-  // ---- fit chart ----
-  var box = document.getElementById("fit-chart"), title = document.getElementById("fit-title"),
-      read = document.getElementById("fit-read"), inc = document.getElementById("inc13"),
-      btns = document.querySelectorAll("#fit-fig .seg button"), K = 2, sel = null;
-  function draw() {
-    var W = Math.max(300, box.clientWidth - 20), H = W < 560 ? 300 : 380;
-    var L = 46, R = 14, T = 14, B = 40;
-    var ys = D.map(function (r) { return r[K]; });
-    var y0 = Math.floor((Math.min.apply(null, ys) - 6) / 10) * 10, y1 = Math.ceil((Math.max.apply(null, ys) + 6) / 10) * 10;
-    var X = function (v) { return L + (v - 42) / (86 - 42) * (W - L - R); };
-    var Y = function (v) { return T + (y1 - v) / (y1 - y0) * (H - T - B); };
-    box.innerHTML = "";
-    var s = el("svg", { viewBox: "0 0 " + W + " " + H, width: W, height: H, role: "img",
-      "aria-label": "Scatter of race-day temperature against " + NAME[K].toLowerCase() + " finish time, one point per year, with a fitted line" }, box);
-    var step = (y1 - y0) > 70 ? 20 : 10;
-    for (var v = y0; v <= y1; v += step) { el("line", { class: "grid", x1: L, x2: W - R, y1: Y(v), y2: Y(v) }, s); el("text", { x: L - 6, y: Y(v) + 4, "text-anchor": "end" }, s, hm(v)); }
-    for (var t = 45; t <= 85; t += 10) el("text", { x: X(t), y: H - B + 18, "text-anchor": "middle" }, s, t + "°F");
-    el("text", { x: W - R, y: H - 6, "text-anchor": "end" }, s, "race-day temperature");
-    var rows = D.filter(function (r) { return inc.checked || r[0] !== 2013; });
-    var f = ols(rows, K);
-    el("line", { class: "fit", x1: X(44), y1: Y(f.a + f.b * 44), x2: X(83), y2: Y(f.a + f.b * 83) }, s);
-    D.forEach(function (r) {
-      var cls = r[0] === 2013 && !inc.checked ? "halt" : (r[1] > 70 ? "hot" : "cool");
-      var c = el("circle", { class: "p " + cls + (sel === r[0] ? " sel" : ""), cx: X(r[1]), cy: Y(r[K]), r: W < 560 ? 6.5 : 7.5, tabindex: 0,
-        "aria-label": r[0] + ", " + r[1] + " degrees, " + hm(r[K]) }, s);
-      var show = function () { sel = r[0]; s.querySelectorAll(".p").forEach(function (p) { p.classList.remove("sel"); }); c.classList.add("sel");
-        read.textContent = r[0] + (r[0] === 2013 ? " (halted)" : "") + "  ·  " + r[1].toFixed(1) + "°F  ·  " + NAME[K].toLowerCase() + " " + hm(r[K]) + "  ·  " + r[5].toLocaleString("en-US") + " finishers"; };
-      c.addEventListener("mouseenter", show); c.addEventListener("focus", show); c.addEventListener("click", show);
-      if (r[1] > 70 || r[0] === 2013) el("text", { class: "lab" + (r[1] > 70 ? " hot" : ""), x: X(r[1]) + (r[0] === 2012 ? -4 : 12), y: Y(r[K]) + (r[0] === 2012 ? 24 : 5), "text-anchor": r[0] === 2012 ? "end" : "start" }, s, r[0] === 2013 ? "2013*" : String(r[0]));
-    });
-    title.textContent = NAME[K] + ": " + (f.b >= 0 ? "+" : "") + f.b.toFixed(2) + " min per °F, r = " + f.r.toFixed(2) + (inc.checked ? " (2013 included)" : "");
-  }
-  btns.forEach(function (b) { b.addEventListener("click", function () { K = +b.dataset.k; btns.forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); }); draw(); }); });
-  inc.addEventListener("change", draw);
-  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(draw, 120); });
-  draw();
-
-  // ---- estimator ----
-  var fit13 = D.filter(function (r) { return r[0] !== 2013; });
-  // anchors: (typical time of that quantile, fitted share of time lost per °F)
-  var A = [3, 2, 4].map(function (k) { var f = ols(fit13, k); return [f.mean, f.b / f.mean]; });
-  function rate(m) {
-    if (m <= A[0][0]) return A[0][1];
-    if (m >= A[2][0]) return A[2][1];
-    var i = m < A[1][0] ? 0 : 1, u = (m - A[i][0]) / (A[i + 1][0] - A[i][0]);
-    return A[i][1] + u * (A[i + 1][1] - A[i][1]);
-  }
-  var tIn = document.getElementById("est-time"), t0 = document.getElementById("est-t0"), t1 = document.getElementById("est-t1");
-  function parse(s) { var p = s.trim().split(/[:.\s]+/).map(Number); if (p.some(isNaN) || p.length < 2 || p.length > 3) return null; return p[0] * 60 + p[1] + (p[2] || 0) / 60; }
-  function c(f) { return Math.round((f - 32) * 5 / 9); }
-  function est() {
-    document.getElementById("est-t0-o").textContent = t0.value + "°F (" + c(+t0.value) + "°C)";
-    document.getElementById("est-t1-o").textContent = t1.value + "°F (" + c(+t1.value) + "°C)";
-    var m = parse(tIn.value), hint = document.getElementById("est-time-hint");
-    if (m == null || m < 120 || m > 480) { hint.textContent = "Enter a time between 2:00 and 8:00, like 3:45 or 4:12:30."; hint.className = "hint warn"; return; }
-    hint.textContent = "Between 2:00 and 8:00."; hint.className = "hint";
-    var dT = t1.value - t0.value, k = rate(m), d = m * k * dT, out = m + d;
-    document.getElementById("est-out").textContent = hms(out);
-    var ad = Math.abs(d), sg = d > 0.0083 ? "+" : (d < -0.0083 ? "−" : "");
-    document.getElementById("est-delta").textContent = sg + Math.floor(ad) + " min " + Math.round((ad % 1) * 60) + " s";
-    var pk = out / 42.195, pm = out / 26.2188;
-    function pace(x) { var s = Math.round(x * 60); return Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + s % 60; }
-    document.getElementById("est-pace").textContent = "Pace " + pace(pk) + " per km, " + pace(pm) + " per mile. Rate used: " + (k * 100).toFixed(2) + "% of finish time per °F.";
-    var notes = [];
-    if (+t0.value < 45 || +t0.value > 82 || +t1.value < 45 || +t1.value > 82) notes.push("A temperature outside 45 to 81°F is beyond the races in the data, so the line is being extended past what was measured.");
-    if (dT < 0) notes.push("A cooler forecast runs the same line backwards. Very cold days were not in the data.");
-    var n = document.getElementById("est-note"); n.textContent = notes.join(" "); n.className = notes.length ? "warn" : "";
-  }
-  [tIn, t0, t1].forEach(function (e) { e.addEventListener("input", est); });
-  est();
-})();
-</script>
+<script src="../assets/heat_data.js"></script>
+<script src="../assets/heat.js"></script>
 </body>
 </html>
